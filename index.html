@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ясин — веб-разработчик · Портфолио</title>
+  <meta name="description" content="Портфолио веб-разработчика: генератор промптов для нейросетей, трекер экранного времени, лендинги, десктоп-приложения на Python. HTML, CSS, JavaScript, Python, Electron.">
+
+  <meta name="theme-color" content="#0d1117">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ясин — веб-разработчик · Портфолио">
+  <meta property="og:description" content="Проекты на чистом JavaScript, Python и Electron: от PWA-генератора промптов до десктоп-ассистента с локальной нейросетью.">
+  <meta property="og:url" content="https://yasin274.github.io/">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d1117'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5M18.5 8l-5 16' fill='none' stroke='%2358a6ff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Reveal animations only apply when JS can undo them -->
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav" id="nav">
+    <a class="nav-logo" href="#top">
+      <span class="nav-logo-mark">&lt;/&gt;</span>
+      <span class="nav-logo-text">yasin<span class="accent">274</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Основная навигация">
+      <a href="#projects">Проекты</a>
+      <a href="#stack">Стек</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <a class="nav-github" href="https://github.com/yasin274" target="_blank" rel="noopener">
+      GitHub ↗
+    </a>
+  </header>
+
+  <main id="top">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+      <p class="hero-eyebrow reveal">// WEB DEVELOPER</p>
+      <h1 class="hero-title reveal">
+        Привет, я <span class="accent-blue">Ясин</span>.<br>
+        Делаю <span class="accent-orange">быстрые</span> интерфейсы<br>
+        и полезные инструменты.
+      </h1>
+      <p class="hero-text reveal">
+        Пишу на чистом JavaScript без фреймворков там, где важна скорость,
+        и на Python — там, где нужна автоматизация. Довожу проекты
+        до рабочего состояния: с деплоем, офлайн-режимом и документацией.
+      </p>
+      <div class="hero-actions reveal">
+        <a class="btn btn-primary" href="#projects">Смотреть проекты</a>
+        <a class="btn btn-ghost" href="https://github.com/yasin274" target="_blank" rel="noopener">GitHub</a>
+      </div>
+
+      <dl class="hero-stats reveal">
+        <div class="hero-stat">
+          <dt>Проектов</dt>
+          <dd>5</dd>
+        </div>
+        <div class="hero-stat">
+          <dt>Живых демо</dt>
+          <dd>2</dd>
+        </div>
+        <div class="hero-stat">
+          <dt>Зависимостей во фронтенде</dt>
+          <dd>0</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section class="section" id="projects">
+      <header class="section-head reveal">
+        <h2 class="section-title"><span class="title-decor">//</span> Проекты</h2>
+        <div class="filters" role="group" aria-label="Фильтр проектов">
+          <button type="button" class="filter is-active" data-filter="all">Все</button>
+          <button type="button" class="filter" data-filter="web">Веб</button>
+          <button type="button" class="filter" data-filter="desktop">Десктоп</button>
+        </div>
+      </header>
+
+      <div class="projects" id="projects-grid">
+
+        <!-- 1. AI Prompt Architect -->
+        <article class="card card-featured reveal" data-category="web">
+          <div class="card-badge">Флагман</div>
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">⚡</span>
+            <div>
+              <h3 class="card-title">AI Prompt Architect</h3>
+              <p class="card-sub">Генератор промптов для любой нейросети</p>
+            </div>
+          </div>
+          <p class="card-text">
+            Описываете задачу по-русски — получаете жёстко структурированный промпт
+            на английском. 8 режимов (разработка, текст, анализ, обучение, изображения),
+            21 целевая модель со своими правилами формата, история промптов,
+            экспорт в файл, интерфейс RU/EN. Ставится как приложение и работает офлайн.
+          </p>
+          <ul class="card-tags">
+            <li>HTML5</li><li>CSS3</li><li>Vanilla JS</li><li>PWA</li><li>Service Worker</li>
+          </ul>
+          <div class="card-links">
+            <a class="link-demo" href="https://yasin274.github.io/ai-prompt-architect/" target="_blank" rel="noopener">Открыть демо ↗</a>
+            <a class="link-code" href="https://github.com/yasin274/ai-prompt-architect" target="_blank" rel="noopener">Код ↗</a>
+          </div>
+        </article>
+
+        <!-- 2. Focus -->
+        <article class="card reveal" data-category="web desktop">
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">🎯</span>
+            <div>
+              <h3 class="card-title">Фокус</h3>
+              <p class="card-sub">Трекер экранного времени</p>
+            </div>
+          </div>
+          <p class="card-text">
+            Приложение для контроля времени за экраном: таймеры фокус-сессий,
+            статистика и хранение данных на устройстве. Собрано в двух видах —
+            как PWA для браузера и как десктоп-приложение на Electron
+            с установщиком под Windows.
+          </p>
+          <ul class="card-tags">
+            <li>JavaScript</li><li>Electron</li><li>PWA</li><li>localStorage</li>
+          </ul>
+          <div class="card-links">
+            <a class="link-code" href="https://github.com/yasin274/focus-detox" target="_blank" rel="noopener">Код ↗</a>
+          </div>
+        </article>
+
+        <!-- 3. AUTOCLEAN -->
+        <article class="card reveal" data-category="web">
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">🚗</span>
+            <div>
+              <h3 class="card-title">AUTOCLEAN</h3>
+              <p class="card-sub">Лендинг автодетейлинг-студии</p>
+            </div>
+          </div>
+          <p class="card-text">
+            Коммерческий одностраничник премиального сегмента: услуги полировки,
+            керамики и защиты кузова, галерея работ «до/после», прайс и форма заявки.
+            Адаптивная вёрстка, плавные анимации, оптимизированные изображения.
+          </p>
+          <ul class="card-tags">
+            <li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>Адаптив</li>
+          </ul>
+          <div class="card-links">
+            <a class="link-demo" href="https://yasin274.github.io/auto-detailing-landing/" target="_blank" rel="noopener">Открыть демо ↗</a>
+            <a class="link-code" href="https://github.com/yasin274/auto-detailing-landing" target="_blank" rel="noopener">Код ↗</a>
+          </div>
+        </article>
+
+        <!-- 4. JARVIS -->
+        <article class="card reveal" data-category="desktop">
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">🤖</span>
+            <div>
+              <h3 class="card-title">J.A.R.V.I.S</h3>
+              <p class="card-sub">Голосовой ассистент для Windows</p>
+            </div>
+          </div>
+          <p class="card-text">
+            Фоновый помощник в системном трее: строка запуска по Alt+Space,
+            управление системой голосом и текстом, объяснение кода из буфера обмена
+            через локальную модель Qwen в Ollama. Распознавание речи и wake-word
+            «Джарвис» работают офлайн на Vosk, ответы озвучиваются через Windows SAPI.
+          </p>
+          <ul class="card-tags">
+            <li>Python</li><li>Ollama · Qwen</li><li>Vosk</li><li>pywin32</li>
+          </ul>
+          <div class="card-links">
+            <span class="link-local">Приватный проект</span>
+          </div>
+        </article>
+
+        <!-- 5. PassBox -->
+        <article class="card reveal" data-category="desktop">
+          <div class="card-head">
+            <span class="card-icon" aria-hidden="true">🔐</span>
+            <div>
+              <h3 class="card-title">PassBox</h3>
+              <p class="card-sub">Менеджер паролей</p>
+            </div>
+          </div>
+          <p class="card-text">
+            Десктопное хранилище паролей с шифрованием AES-256-GCM: ключ выводится
+            из мастер-пароля через PBKDF2 с 600 000 итераций. К записям крепятся
+            вложения, буфер обмена очищается через 30 секунд, а доступ можно
+            восстановить по резервной фразе из 16 слов.
+          </p>
+          <ul class="card-tags">
+            <li>Python</li><li>tkinter</li><li>cryptography</li><li>AES-256-GCM</li>
+          </ul>
+          <div class="card-links">
+            <span class="link-local">Приватный проект</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ===== STACK ===== -->
+    <section class="section" id="stack">
+      <h2 class="section-title reveal"><span class="title-decor">//</span> Стек</h2>
+      <div class="stack-grid">
+        <div class="stack-card reveal">
+          <h3>Фронтенд</h3>
+          <ul>
+            <li>HTML5, семантическая вёрстка</li>
+            <li>CSS3: Grid, Flexbox, переменные, анимации</li>
+            <li>JavaScript ES6+ без фреймворков</li>
+            <li>Адаптив и доступность</li>
+          </ul>
+        </div>
+        <div class="stack-card reveal">
+          <h3>Приложения</h3>
+          <ul>
+            <li>PWA: manifest, service worker, офлайн</li>
+            <li>Electron — десктоп из веб-стека</li>
+            <li>localStorage и работа без бэкенда</li>
+            <li>Сборка установщиков под Windows</li>
+          </ul>
+        </div>
+        <div class="stack-card reveal">
+          <h3>Python</h3>
+          <ul>
+            <li>Автоматизация и десктоп-утилиты</li>
+            <li>tkinter, pywin32</li>
+            <li>Криптография: AES-GCM, PBKDF2</li>
+            <li>Локальные LLM через Ollama</li>
+          </ul>
+        </div>
+        <div class="stack-card reveal">
+          <h3>Инструменты</h3>
+          <ul>
+            <li>Git и GitHub, GitHub Pages</li>
+            <li>Claude Code в ежедневной работе</li>
+            <li>Обычная работа в терминале</li>
+            <li>Документация к своим проектам</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACTS ===== -->
+    <section class="section section-contacts" id="contacts">
+      <h2 class="section-title reveal"><span class="title-decor">//</span> Контакты</h2>
+      <p class="contacts-text reveal">
+        Открыт к предложениям по фронтенду и небольшим продуктовым задачам.
+        Пишите — отвечу.
+      </p>
+      <div class="contacts-links reveal">
+        <a class="contact-card" href="mailto:wb.salihome@gmail.com">
+          <span class="contact-icon" aria-hidden="true">✉</span>
+          <span class="contact-info">
+            <span class="contact-label">Почта</span>
+            <span class="contact-value">wb.salihome@gmail.com</span>
+          </span>
+        </a>
+        <a class="contact-card" href="https://github.com/yasin274" target="_blank" rel="noopener">
+          <span class="contact-icon" aria-hidden="true">⌥</span>
+          <span class="contact-info">
+            <span class="contact-label">GitHub</span>
+            <span class="contact-value">github.com/yasin274</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span id="year">2026</span> Ясин · Портфолио</span>
+    <span class="footer-tech">Сверстано вручную · без фреймворков и зависимостей</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
