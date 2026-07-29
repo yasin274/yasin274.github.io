@@ -49,19 +49,23 @@ const onScroll = () => {
 window.addEventListener("scroll", onScroll, { passive: true });
 onScroll();
 
-/* ---------- Project filters ---------- */
+/* ---------- Case filters ---------- */
 const filters = document.querySelectorAll(".filter");
-const cards = document.querySelectorAll(".projects .card");
+const cases = document.querySelectorAll(".cases .case");
 
 filters.forEach((btn) => {
   btn.addEventListener("click", () => {
-    filters.forEach((b) => b.classList.toggle("is-active", b === btn));
+    filters.forEach((b) => {
+      const active = b === btn;
+      b.classList.toggle("is-active", active);
+      b.setAttribute("aria-pressed", String(active));
+    });
 
     const filter = btn.dataset.filter;
-    cards.forEach((card) => {
-      const categories = card.dataset.category.split(" ");
+    cases.forEach((item) => {
+      const categories = item.dataset.category.split(" ");
       const show = filter === "all" || categories.includes(filter);
-      card.classList.toggle("is-hidden", !show);
+      item.classList.toggle("is-hidden", !show);
     });
   });
 });

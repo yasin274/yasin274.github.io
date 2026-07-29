@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ясин — веб-разработчик · Портфолио</title>
-  <meta name="description" content="Портфолио веб-разработчика: генератор промптов для нейросетей, трекер экранного времени, лендинги, десктоп-приложения на Python. HTML, CSS, JavaScript, Python, Electron.">
+  <title>Ясин — разработка сайтов и веб-приложений на заказ</title>
+  <meta name="description" content="Разработка лендингов, веб-приложений и PWA на заказ. Ручная вёрстка без конструкторов, TypeScript и Node.js для бэкенда. Смета бесплатно, исходный код остаётся у вас.">
 
-  <meta name="theme-color" content="#0d1117">
+  <meta name="theme-color" content="#0b0f1a">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Ясин — веб-разработчик · Портфолио">
-  <meta property="og:description" content="Проекты на чистом JavaScript, Python и Electron: от PWA-генератора промптов до десктоп-ассистента с локальной нейросетью.">
+  <meta property="og:title" content="Ясин — разработка сайтов и веб-приложений на заказ">
+  <meta property="og:description" content="Лендинги под заявки, веб-приложения с базой и авторизацией, PWA и десктоп-программы. Код остаётся вашим.">
   <meta property="og:url" content="https://yasin274.github.io/">
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d1117'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5M18.5 8l-5 16' fill='none' stroke='%2358a6ff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f1a'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5M18.5 8l-5 16' fill='none' stroke='%2338bdf8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 
   <link rel="stylesheet" href="fonts/fonts.css">
   <link rel="stylesheet" href="style.css">
@@ -22,264 +22,627 @@
 </head>
 <body>
 
+  <a class="skip-link" href="#main">Перейти к содержанию</a>
+
   <!-- ===== NAV ===== -->
   <header class="nav" id="nav">
-    <a class="nav-logo" href="#top">
-      <span class="nav-logo-mark">&lt;/&gt;</span>
-      <span class="nav-logo-text">yasin<span class="accent">274</span></span>
-    </a>
-    <nav class="nav-links" aria-label="Основная навигация">
-      <a href="#projects">Проекты</a>
-      <a href="#stack">Стек</a>
-      <a href="#contacts">Контакты</a>
-    </nav>
-    <a class="nav-github" href="https://github.com/yasin274" target="_blank" rel="noopener">
-      GitHub ↗
-    </a>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#top" aria-label="На главную">
+        <span class="nav-logo-mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="nav-logo-text">yasin<span class="accent">274</span></span>
+      </a>
+
+      <nav class="nav-links" aria-label="Основная навигация">
+        <a href="#services">Услуги</a>
+        <a href="#cases">Кейсы</a>
+        <a href="#process">Процесс</a>
+        <a href="#about">Обо мне</a>
+      </nav>
+
+      <a class="btn btn-primary btn-sm nav-cta" href="#contact">Обсудить задачу</a>
+    </div>
   </header>
 
-  <main id="top">
+  <main id="main">
+    <span id="top"></span>
 
     <!-- ===== HERO ===== -->
     <section class="hero">
-      <p class="hero-eyebrow reveal">// WEB DEVELOPER</p>
-      <h1 class="hero-title reveal">
-        Привет, я <span class="accent-blue">Ясин</span>.<br>
-        Делаю <span class="accent-orange">быстрые</span> интерфейсы<br>
-        и полезные инструменты.
-      </h1>
-      <p class="hero-text reveal">
-        Пишу на чистом JavaScript без фреймворков там, где важна скорость,
-        и на Python — там, где нужна автоматизация. Довожу проекты
-        до рабочего состояния: с деплоем, офлайн-режимом и документацией.
-      </p>
-      <div class="hero-actions reveal">
-        <a class="btn btn-primary" href="#projects">Смотреть проекты</a>
-        <a class="btn btn-ghost" href="https://github.com/yasin274" target="_blank" rel="noopener">GitHub</a>
+      <div class="wrap hero-inner">
+        <p class="eyebrow reveal">// Веб-разработка на заказ</p>
+
+        <h1 class="hero-title reveal">
+          Сайты и приложения, которые<br>
+          грузятся <span class="accent-text">мгновенно</span><br>
+          и не ломаются
+        </h1>
+
+        <p class="hero-lead reveal">
+          Лендинги под заявки, веб-приложения с базой и личным кабинетом,
+          PWA и программы для Windows. Без конструкторов и лишних
+          зависимостей: исходный код остаётся вашим, и проект можно
+          развивать дальше.
+        </p>
+
+        <div class="hero-actions reveal">
+          <a class="btn btn-primary" href="#contact">Обсудить задачу</a>
+          <a class="btn btn-ghost" href="#cases">Смотреть кейсы</a>
+        </div>
+
+        <dl class="hero-stats reveal">
+          <div class="stat">
+            <dt>Проектов доведено до запуска</dt>
+            <dd>6</dd>
+          </div>
+          <div class="stat">
+            <dt>Живых демо, которые можно открыть</dt>
+            <dd>2</dd>
+          </div>
+          <div class="stat">
+            <dt>Зависимостей во фронтенде</dt>
+            <dd>0</dd>
+          </div>
+        </dl>
       </div>
 
-      <dl class="hero-stats reveal">
-        <div class="hero-stat">
-          <dt>Проектов</dt>
-          <dd>5</dd>
-        </div>
-        <div class="hero-stat">
-          <dt>Живых демо</dt>
-          <dd>2</dd>
-        </div>
-        <div class="hero-stat">
-          <dt>Зависимостей во фронтенде</dt>
-          <dd>0</dd>
-        </div>
-      </dl>
-    </section>
-
-    <!-- ===== PROJECTS ===== -->
-    <section class="section" id="projects">
-      <header class="section-head reveal">
-        <h2 class="section-title"><span class="title-decor">//</span> Проекты</h2>
-        <div class="filters" role="group" aria-label="Фильтр проектов">
-          <button type="button" class="filter is-active" data-filter="all">Все</button>
-          <button type="button" class="filter" data-filter="web">Веб</button>
-          <button type="button" class="filter" data-filter="desktop">Десктоп</button>
-        </div>
-      </header>
-
-      <div class="projects" id="projects-grid">
-
-        <!-- 1. AI Prompt Architect -->
-        <article class="card card-featured reveal" data-category="web">
-          <div class="card-badge">Флагман</div>
-          <div class="card-head">
-            <span class="card-icon" aria-hidden="true">⚡</span>
-            <div>
-              <h3 class="card-title">AI Prompt Architect</h3>
-              <p class="card-sub">Генератор промптов для любой нейросети</p>
-            </div>
-          </div>
-          <p class="card-text">
-            Описываете задачу по-русски — получаете жёстко структурированный промпт
-            на английском. 8 режимов (разработка, текст, анализ, обучение, изображения),
-            21 целевая модель со своими правилами формата, история промптов,
-            экспорт в файл, интерфейс RU/EN. Ставится как приложение и работает офлайн.
-          </p>
-          <ul class="card-tags">
-            <li>HTML5</li><li>CSS3</li><li>Vanilla JS</li><li>PWA</li><li>Service Worker</li>
-          </ul>
-          <div class="card-links">
-            <a class="link-demo" href="https://yasin274.github.io/ai-prompt-architect/" target="_blank" rel="noopener">Открыть демо ↗</a>
-            <a class="link-code" href="https://github.com/yasin274/ai-prompt-architect" target="_blank" rel="noopener">Код ↗</a>
-          </div>
-        </article>
-
-        <!-- 2. Focus -->
-        <article class="card reveal" data-category="web desktop">
-          <div class="card-head">
-            <span class="card-icon" aria-hidden="true">🎯</span>
-            <div>
-              <h3 class="card-title">Фокус</h3>
-              <p class="card-sub">Трекер экранного времени</p>
-            </div>
-          </div>
-          <p class="card-text">
-            Приложение для контроля времени за экраном: таймеры фокус-сессий,
-            статистика и хранение данных на устройстве. Собрано в двух видах —
-            как PWA для браузера и как десктоп-приложение на Electron
-            с установщиком под Windows.
-          </p>
-          <ul class="card-tags">
-            <li>JavaScript</li><li>Electron</li><li>PWA</li><li>localStorage</li>
-          </ul>
-          <div class="card-links">
-            <a class="link-code" href="https://github.com/yasin274/focus-detox" target="_blank" rel="noopener">Код ↗</a>
-          </div>
-        </article>
-
-        <!-- 3. AUTOCLEAN -->
-        <article class="card reveal" data-category="web">
-          <div class="card-head">
-            <span class="card-icon" aria-hidden="true">🚗</span>
-            <div>
-              <h3 class="card-title">AUTOCLEAN</h3>
-              <p class="card-sub">Лендинг автодетейлинг-студии</p>
-            </div>
-          </div>
-          <p class="card-text">
-            Коммерческий одностраничник премиального сегмента: услуги полировки,
-            керамики и защиты кузова, галерея работ «до/после», прайс и форма заявки.
-            Адаптивная вёрстка, плавные анимации, оптимизированные изображения.
-          </p>
-          <ul class="card-tags">
-            <li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>Адаптив</li>
-          </ul>
-          <div class="card-links">
-            <a class="link-demo" href="https://yasin274.github.io/auto-detailing-landing/" target="_blank" rel="noopener">Открыть демо ↗</a>
-            <a class="link-code" href="https://github.com/yasin274/auto-detailing-landing" target="_blank" rel="noopener">Код ↗</a>
-          </div>
-        </article>
-
-        <!-- 4. JARVIS -->
-        <article class="card reveal" data-category="desktop">
-          <div class="card-head">
-            <span class="card-icon" aria-hidden="true">🤖</span>
-            <div>
-              <h3 class="card-title">J.A.R.V.I.S</h3>
-              <p class="card-sub">Голосовой ассистент для Windows</p>
-            </div>
-          </div>
-          <p class="card-text">
-            Фоновый помощник в системном трее: строка запуска по Alt+Space,
-            управление системой голосом и текстом, объяснение кода из буфера обмена
-            через локальную модель Qwen в Ollama. Распознавание речи и wake-word
-            «Джарвис» работают офлайн на Vosk, ответы озвучиваются через Windows SAPI.
-          </p>
-          <ul class="card-tags">
-            <li>Python</li><li>Ollama · Qwen</li><li>Vosk</li><li>pywin32</li>
-          </ul>
-          <div class="card-links">
-            <span class="link-local">Приватный проект</span>
-          </div>
-        </article>
-
-        <!-- 5. PassBox -->
-        <article class="card reveal" data-category="desktop">
-          <div class="card-head">
-            <span class="card-icon" aria-hidden="true">🔐</span>
-            <div>
-              <h3 class="card-title">PassBox</h3>
-              <p class="card-sub">Менеджер паролей</p>
-            </div>
-          </div>
-          <p class="card-text">
-            Десктопное хранилище паролей с шифрованием AES-256-GCM: ключ выводится
-            из мастер-пароля через PBKDF2 с 600 000 итераций. К записям крепятся
-            вложения, буфер обмена очищается через 30 секунд, а доступ можно
-            восстановить по резервной фразе из 16 слов.
-          </p>
-          <ul class="card-tags">
-            <li>Python</li><li>tkinter</li><li>cryptography</li><li>AES-256-GCM</li>
-          </ul>
-          <div class="card-links">
-            <span class="link-local">Приватный проект</span>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- ===== STACK ===== -->
-    <section class="section" id="stack">
-      <h2 class="section-title reveal"><span class="title-decor">//</span> Стек</h2>
-      <div class="stack-grid">
-        <div class="stack-card reveal">
-          <h3>Фронтенд</h3>
-          <ul>
-            <li>HTML5, семантическая вёрстка</li>
-            <li>CSS3: Grid, Flexbox, переменные, анимации</li>
-            <li>JavaScript ES6+ без фреймворков</li>
-            <li>Адаптив и доступность</li>
-          </ul>
-        </div>
-        <div class="stack-card reveal">
-          <h3>Приложения</h3>
-          <ul>
-            <li>PWA: manifest, service worker, офлайн</li>
-            <li>Electron — десктоп из веб-стека</li>
-            <li>localStorage и работа без бэкенда</li>
-            <li>Сборка установщиков под Windows</li>
-          </ul>
-        </div>
-        <div class="stack-card reveal">
-          <h3>Python</h3>
-          <ul>
-            <li>Автоматизация и десктоп-утилиты</li>
-            <li>tkinter, pywin32</li>
-            <li>Криптография: AES-GCM, PBKDF2</li>
-            <li>Локальные LLM через Ollama</li>
-          </ul>
-        </div>
-        <div class="stack-card reveal">
-          <h3>Инструменты</h3>
-          <ul>
-            <li>Git и GitHub, GitHub Pages</li>
-            <li>Claude Code в ежедневной работе</li>
-            <li>Обычная работа в терминале</li>
-            <li>Документация к своим проектам</li>
-          </ul>
+      <div class="tech-strip reveal" aria-label="Технологии">
+        <div class="wrap tech-strip-inner">
+          <span>TypeScript</span>
+          <span>Node.js</span>
+          <span>React</span>
+          <span>PostgreSQL</span>
+          <span>PWA</span>
+          <span>Electron</span>
+          <span>Python</span>
         </div>
       </div>
     </section>
 
-    <!-- ===== CONTACTS ===== -->
-    <section class="section section-contacts" id="contacts">
-      <h2 class="section-title reveal"><span class="title-decor">//</span> Контакты</h2>
-      <p class="contacts-text reveal">
-        Открыт к предложениям по фронтенду и небольшим продуктовым задачам.
-        Пишите — отвечу.
-      </p>
-      <div class="contacts-links reveal">
-        <a class="contact-card" href="mailto:yasin.latipov@bk.ru">
-          <span class="contact-icon" aria-hidden="true">✉</span>
-          <span class="contact-info">
-            <span class="contact-label">Почта</span>
-            <span class="contact-value">yasin.latipov@bk.ru</span>
-          </span>
-        </a>
-        <a class="contact-card" href="https://github.com/yasin274" target="_blank" rel="noopener">
-          <span class="contact-icon" aria-hidden="true">⌥</span>
-          <span class="contact-info">
-            <span class="contact-label">GitHub</span>
-            <span class="contact-value">github.com/yasin274</span>
-          </span>
-        </a>
+    <!-- ===== SERVICES ===== -->
+    <section class="section" id="services">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <h2 class="section-title"><span class="title-decor">//</span> Услуги и цены</h2>
+          <p class="section-sub">
+            Цена зависит от объёма — ниже нижние границы. Разбор задачи и точная
+            смета бесплатно.
+          </p>
+        </header>
+
+        <div class="tiers">
+
+          <article class="tier reveal">
+            <div class="tier-head">
+              <span class="tier-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2.5" y="4" width="19" height="15" rx="2.5"/>
+                  <path d="M2.5 8.5h19"/><path d="M6 6.2h.01M8.5 6.2h.01"/>
+                  <path d="M7 12.5h6M7 15.5h10"/>
+                </svg>
+              </span>
+              <h3 class="tier-name">Лендинг</h3>
+            </div>
+            <p class="tier-price">от <b>20 000</b> ₽</p>
+            <p class="tier-term">3–7 дней</p>
+            <p class="tier-desc">
+              Одностраничный сайт, задача которого — приносить заявки.
+            </p>
+            <ul class="tier-list">
+              <li>Адаптив под телефон, планшет и десктоп</li>
+              <li>Галерея работ, прайс, отзывы, форма заявки</li>
+              <li>Заявки приходят на почту или в Telegram</li>
+              <li>Подключение домена и хостинга</li>
+              <li>Оптимизация скорости и базовое SEO</li>
+            </ul>
+            <a class="btn btn-ghost btn-block" href="#contact">Обсудить лендинг</a>
+          </article>
+
+          <article class="tier tier-featured reveal">
+            <div class="tier-badge">Чаще всего заказывают</div>
+            <div class="tier-head">
+              <span class="tier-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <ellipse cx="12" cy="5.5" rx="7.5" ry="3"/>
+                  <path d="M4.5 5.5v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6"/>
+                  <path d="M4.5 11.5v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6"/>
+                </svg>
+              </span>
+              <h3 class="tier-name">Веб-приложение</h3>
+            </div>
+            <p class="tier-price">от <b>60 000</b> ₽</p>
+            <p class="tier-term">от 2 недель</p>
+            <p class="tier-desc">
+              Сервис с базой данных, входом и логикой — не просто страница.
+            </p>
+            <ul class="tier-list">
+              <li>Фронтенд, бэкенд и база данных</li>
+              <li>Регистрация, вход, личный кабинет</li>
+              <li>Расчёты, отчёты, выгрузка в Excel</li>
+              <li>Интеграции с внешними API</li>
+              <li>Развёртывание на сервере и домен</li>
+            </ul>
+            <a class="btn btn-primary btn-block" href="#contact">Обсудить приложение</a>
+          </article>
+
+          <article class="tier reveal">
+            <div class="tier-head">
+              <span class="tier-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="7" y="2.5" width="10" height="19" rx="2.5"/>
+                  <path d="M10.5 5.5h3"/><circle cx="12" cy="17.5" r="1.2"/>
+                </svg>
+              </span>
+              <h3 class="tier-name">PWA и десктоп</h3>
+            </div>
+            <p class="tier-price">от <b>35 000</b> ₽</p>
+            <p class="tier-term">от 1 недели</p>
+            <p class="tier-desc">
+              Приложение, которое ставится на устройство и работает без интернета.
+            </p>
+            <ul class="tier-list">
+              <li>Ставится на телефон как обычное приложение</li>
+              <li>Полноценная работа офлайн</li>
+              <li>Установщик для Windows</li>
+              <li>Автообновления без участия пользователя</li>
+              <li>Данные хранятся на устройстве</li>
+            </ul>
+            <a class="btn btn-ghost btn-block" href="#contact">Обсудить приложение</a>
+          </article>
+
+        </div>
+
+        <p class="tiers-note reveal">
+          Доработка и поддержка существующего сайта — <b>от 2 500 ₽/час</b>.
+          Если не знаете, к какой категории относится задача, просто опишите её —
+          разберусь и скажу цену.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== CASES ===== -->
+    <section class="section" id="cases">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <h2 class="section-title"><span class="title-decor">//</span> Кейсы</h2>
+          <div class="filters" role="group" aria-label="Фильтр проектов">
+            <button type="button" class="filter is-active" data-filter="all">Все</button>
+            <button type="button" class="filter" data-filter="commercial">Коммерческие</button>
+            <button type="button" class="filter" data-filter="web">Веб</button>
+            <button type="button" class="filter" data-filter="desktop">Десктоп</button>
+          </div>
+        </header>
+
+        <div class="cases" id="cases-grid">
+
+          <!-- 1. WB unit economics -->
+          <article class="case case-wide reveal" data-category="commercial web">
+            <div class="case-top">
+              <span class="case-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 20.5h18"/>
+                  <path d="M6 20.5V12M11 20.5V6.5M16 20.5v-6M21 20.5V3.5"/>
+                </svg>
+              </span>
+              <div>
+                <p class="case-kicker">Продукт · в разработке</p>
+                <h3 class="case-title">Калькулятор юнит-экономики Wildberries</h3>
+              </div>
+            </div>
+
+            <p class="case-text">
+              Сервис показывает продавцу на Wildberries, сколько он реально
+              зарабатывает с товара: комиссия категории, логистика по объёму
+              и коэффициенту склада, возвраты, хранение, реклама, штрафы,
+              эквайринг и налог — постатейно, до копейки. Тарифы тянутся
+              из API Wildberries по расписанию, отчёт о реализации
+              сверяет план с фактом, а выгрузка в Excel уходит
+              <b>с живыми формулами</b>: продавец меняет цену в файле
+              и сразу видит новую маржу.
+            </p>
+
+            <ul class="case-facts">
+              <li><b>18 400</b> строк TypeScript</li>
+              <li><b>6</b> моделей данных</li>
+              <li>API-ключи шифруются <b>AES-256-GCM</b></li>
+            </ul>
+
+            <ul class="case-tags">
+              <li>TypeScript</li><li>Node.js</li><li>Express 5</li>
+              <li>Prisma 7</li><li>PostgreSQL</li><li>React</li><li>Zod</li><li>JWT</li>
+            </ul>
+
+            <div class="case-links">
+              <a class="link-primary" href="https://github.com/yasin274/wb-unit-economics-showcase" target="_blank" rel="noopener">Разбор проекта ↗</a>
+              <span class="link-muted">Код закрыт · демо по запросу</span>
+            </div>
+          </article>
+
+          <!-- 2. AUTOCLEAN -->
+          <article class="case case-wide reveal" data-category="commercial web">
+            <div class="case-top">
+              <span class="case-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 13.5l1.8-5A2.5 2.5 0 017.2 7h9.6a2.5 2.5 0 012.4 1.5l1.8 5"/>
+                  <path d="M2.5 13.5h19v3.5a1 1 0 01-1 1h-17a1 1 0 01-1-1z"/>
+                  <circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/>
+                </svg>
+              </span>
+              <div>
+                <p class="case-kicker">Коммерческий лендинг</p>
+                <h3 class="case-title">AUTOCLEAN</h3>
+              </div>
+            </div>
+
+            <p class="case-text">
+              Одностраничник для студии автодетейлинга премиального сегмента:
+              услуги полировки, керамики и защиты кузова, галерея работ
+              «до и после», прайс и форма заявки. Интерактивная подсветка
+              в первом экране следует за курсором, изображения сжаты,
+              вёрстка адаптивная. Ноль зависимостей — страница открывается
+              меньше чем за секунду и живёт на любом хостинге.
+            </p>
+
+            <ul class="case-tags">
+              <li>HTML5</li><li>CSS3</li><li>Vanilla JS</li><li>Адаптив</li><li>Анимации</li>
+            </ul>
+
+            <div class="case-links">
+              <a class="link-primary" href="https://yasin274.github.io/auto-detailing-landing/" target="_blank" rel="noopener">Открыть сайт ↗</a>
+              <a class="link-code" href="https://github.com/yasin274/auto-detailing-landing" target="_blank" rel="noopener">Код ↗</a>
+            </div>
+          </article>
+
+          <!-- 3. AI Prompt Architect -->
+          <article class="case reveal" data-category="web">
+            <div class="case-top">
+              <span class="case-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M13 2.5L4.5 13.5H11l-1 8 8.5-11H12z"/>
+                </svg>
+              </span>
+              <div>
+                <p class="case-kicker">Инструмент · живое демо</p>
+                <h3 class="case-title">AI Prompt Architect</h3>
+              </div>
+            </div>
+
+            <p class="case-text">
+              Генератор структурированных промптов для нейросетей: описываете
+              задачу по-русски — получаете готовый промпт на английском.
+              Восемь режимов работы, 21 целевая модель со своими правилами
+              формата, история, экспорт в файл, интерфейс на двух языках.
+              Ставится как приложение и работает офлайн.
+            </p>
+
+            <ul class="case-tags">
+              <li>Vanilla JS</li><li>PWA</li><li>Service Worker</li><li>localStorage</li>
+            </ul>
+
+            <div class="case-links">
+              <a class="link-primary" href="https://yasin274.github.io/ai-prompt-architect/" target="_blank" rel="noopener">Открыть демо ↗</a>
+              <a class="link-code" href="https://github.com/yasin274/ai-prompt-architect" target="_blank" rel="noopener">Код ↗</a>
+            </div>
+          </article>
+
+          <!-- 4. Focus -->
+          <article class="case reveal" data-category="web desktop">
+            <div class="case-top">
+              <span class="case-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>
+                </svg>
+              </span>
+              <div>
+                <p class="case-kicker">Приложение · PWA и Windows</p>
+                <h3 class="case-title">Фокус</h3>
+              </div>
+            </div>
+
+            <p class="case-text">
+              Трекер экранного времени с режимом Помодоро: таймеры сессий,
+              статистика и хранение данных на устройстве. Собран в двух видах
+              из одной кодовой базы — как PWA для браузера и как программа
+              для Windows с установщиком и автообновлениями через GitHub.
+            </p>
+
+            <ul class="case-tags">
+              <li>JavaScript</li><li>Electron</li><li>PWA</li><li>electron-builder</li>
+            </ul>
+
+            <div class="case-links">
+              <a class="link-primary" href="https://github.com/yasin274/focus-detox/releases" target="_blank" rel="noopener">Скачать ↗</a>
+              <a class="link-code" href="https://github.com/yasin274/focus-detox" target="_blank" rel="noopener">Код ↗</a>
+            </div>
+          </article>
+
+          <!-- 5. JARVIS -->
+          <article class="case reveal" data-category="desktop">
+            <div class="case-top">
+              <span class="case-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="7.5" width="16" height="12" rx="3"/>
+                  <path d="M12 7.5V4M9.5 3.5h5"/>
+                  <path d="M9 12.5v2M15 12.5v2"/><path d="M2.5 12v3M21.5 12v3"/>
+                </svg>
+              </span>
+              <div>
+                <p class="case-kicker">Десктоп · офлайн-ИИ</p>
+                <h3 class="case-title">J.A.R.V.I.S</h3>
+              </div>
+            </div>
+
+            <p class="case-text">
+              Фоновый ассистент для Windows: строка запуска по Alt+Space,
+              управление системой голосом и текстом, объяснение кода
+              из буфера обмена. Распознавание речи, wake-word «Джарвис»
+              и синтез голоса работают полностью офлайн, языковая модель —
+              локальная, через Ollama. Ни один запрос не уходит в интернет.
+            </p>
+
+            <ul class="case-tags">
+              <li>Python</li><li>Ollama · Qwen</li><li>Vosk</li><li>Silero TTS</li><li>WinAPI</li>
+            </ul>
+
+            <div class="case-links">
+              <a class="link-primary" href="https://github.com/yasin274/jarvis-assistant" target="_blank" rel="noopener">Код ↗</a>
+            </div>
+          </article>
+
+          <!-- 6. PassBox -->
+          <article class="case reveal" data-category="desktop">
+            <div class="case-top">
+              <span class="case-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/>
+                  <path d="M8 10.5V7a4 4 0 018 0v3.5"/><circle cx="12" cy="15.7" r="1.3"/>
+                </svg>
+              </span>
+              <div>
+                <p class="case-kicker">Десктоп · криптография</p>
+                <h3 class="case-title">PassBox</h3>
+              </div>
+            </div>
+
+            <p class="case-text">
+              Менеджер паролей, который не ходит в облако. Хранилище
+              зашифровано AES-256-GCM, ключ выводится из мастер-пароля
+              через PBKDF2 с 600 000 итераций. К записям крепятся вложения,
+              буфер обмена очищается через 30 секунд, доступ восстанавливается
+              по резервной фразе из 16 слов.
+            </p>
+
+            <ul class="case-tags">
+              <li>Python</li><li>cryptography</li><li>AES-256-GCM</li><li>PBKDF2</li>
+            </ul>
+
+            <div class="case-links">
+              <a class="link-primary" href="https://github.com/yasin274/passbox" target="_blank" rel="noopener">Код ↗</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROCESS ===== -->
+    <section class="section" id="process">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <h2 class="section-title"><span class="title-decor">//</span> Как я работаю</h2>
+          <p class="section-sub">
+            Никаких «сделаю и покажу через месяц» — рабочую версию видно по ходу.
+          </p>
+        </header>
+
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step-num">01</span>
+            <h3>Разбираем задачу</h3>
+            <p>
+              Двадцать минут разговора: что нужно, для кого и какой результат
+              считается успехом. Бесплатно и без обязательств.
+            </p>
+          </li>
+          <li class="step reveal">
+            <span class="step-num">02</span>
+            <h3>Смета и структура</h3>
+            <p>
+              Фиксирую объём, срок и цену письменно. Вы видите структуру
+              страниц до того, как я начну писать код.
+            </p>
+          </li>
+          <li class="step reveal">
+            <span class="step-num">03</span>
+            <h3>Разработка</h3>
+            <p>
+              Показываю рабочую ссылку по ходу дела, а не в конце. Правки
+              на этом этапе входят в стоимость.
+            </p>
+          </li>
+          <li class="step reveal">
+            <span class="step-num">04</span>
+            <h3>Сдача и поддержка</h3>
+            <p>
+              Деплой, домен, исходный код, инструкция. Две недели после
+              запуска правлю замечания бесплатно.
+            </p>
+          </li>
+        </ol>
+
+        <p class="process-note reveal">
+          <b>Что остаётся у вас:</b> репозиторий с исходным кодом и историей
+          изменений, README с инструкцией по запуску и проект, который можно
+          развивать дальше — своими силами или моими.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="section" id="about">
+      <div class="wrap about-grid">
+        <div class="about-text reveal">
+          <h2 class="section-title"><span class="title-decor">//</span> Обо мне</h2>
+          <p>
+            Меня зовут Ясин. Пишу на чистом JavaScript и CSS там, где важна
+            скорость загрузки, и на TypeScript с Node.js там, где нужны база
+            данных, авторизация и расчёты.
+          </p>
+          <p>
+            Четыре года я работал на складе Wildberries — приёмка, комплектация,
+            отчёты о реализации, штрафы. Поэтому в проектах для маркетплейсов
+            я разбираюсь в предметной области, а не только в коде: свой
+            калькулятор юнит-экономики я написал потому, что своими руками
+            видел, из чего складывается маржа.
+          </p>
+          <p>
+            Каждый проект довожу до конца: развёртывание, документация,
+            установщики. Не сдаю работу со словами «локально работает».
+          </p>
+        </div>
+
+        <dl class="about-stats reveal">
+          <div class="stat">
+            <dt>Строк в самом крупном проекте</dt>
+            <dd>18 400</dd>
+          </div>
+          <div class="stat">
+            <dt>Публичных репозиториев с кодом</dt>
+            <dd>6</dd>
+          </div>
+          <div class="stat">
+            <dt>Года внутри e-commerce</dt>
+            <dd>4</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="section" id="faq">
+      <div class="wrap">
+        <h2 class="section-title reveal"><span class="title-decor">//</span> Частые вопросы</h2>
+
+        <div class="faq">
+          <details class="faq-item reveal">
+            <summary>Сколько времени занимает лендинг?</summary>
+            <p>
+              От трёх до семи рабочих дней, если тексты и фотографии готовы.
+              Если текстов нет — помогу собрать структуру и подскажу, что
+              должно быть на странице.
+            </p>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>Что входит в правки?</summary>
+            <p>
+              Два круга правок после согласования структуры и ещё один после
+              сборки. Мелкие исправления вроде опечаток, отступов и замены
+              фотографий — без счёта.
+            </p>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>Кому принадлежит код?</summary>
+            <p>
+              Вам. Отдаю репозиторий целиком — с историей изменений
+              и документацией. Вы не привязаны ни ко мне, ни к конкретному
+              хостингу.
+            </p>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>Как строится оплата?</summary>
+            <p>
+              Половина до начала работы, половина после сдачи. Для задач
+              длиннее месяца делим на этапы и платим по мере их закрытия.
+            </p>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>Почему не на конструкторе?</summary>
+            <p>
+              Сайт на конструкторе грузится в разы дольше, его нельзя
+              перенести на другой хостинг и нельзя доработать за пределами
+              того, что предусмотрел конструктор. Ручная вёрстка открывается
+              меньше чем за секунду и остаётся вашей.
+            </p>
+          </details>
+
+          <details class="faq-item reveal">
+            <summary>А если задача сложнее, чем сайт?</summary>
+            <p>
+              Тогда это веб-приложение: база данных, вход по логину, расчёты,
+              отчёты, интеграции с чужими API. Такие проекты я тоже делаю —
+              самый крупный на сегодня это 18 400 строк на TypeScript.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="section section-contact" id="contact">
+      <div class="wrap">
+        <h2 class="section-title reveal"><span class="title-decor">//</span> Обсудим задачу</h2>
+        <p class="contact-lead reveal">
+          Напишите, что нужно сделать — отвечу в течение дня. Разбор задачи
+          и смета бесплатно, даже если потом решите делать не со мной.
+        </p>
+
+        <div class="contact-cards reveal">
+          <a class="contact-card" href="mailto:yasin.latipov@bk.ru">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2.5" y="5" width="19" height="14" rx="2.5"/>
+                <path d="M3.5 7l8.5 6 8.5-6"/>
+              </svg>
+            </span>
+            <span class="contact-info">
+              <span class="contact-label">Почта</span>
+              <span class="contact-value">yasin.latipov@bk.ru</span>
+            </span>
+          </a>
+
+          <!--
+            TELEGRAM: раскомментируйте и подставьте свой ник — для заказчиков
+            это основной канал связи, без него теряется часть заявок.
+          <a class="contact-card" href="https://t.me/ВАШ_НИК" target="_blank" rel="noopener">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 4.5L2.8 11.3l5.4 1.9L21 4.5z"/>
+                <path d="M21 4.5l-2.6 14-6.2-5.3L21 4.5z"/>
+                <path d="M8.2 13.2v5l3.9-3.5"/>
+              </svg>
+            </span>
+            <span class="contact-info">
+              <span class="contact-label">Telegram</span>
+              <span class="contact-value">@ВАШ_НИК</span>
+            </span>
+          </a>
+          -->
+
+          <a class="contact-card" href="https://github.com/yasin274" target="_blank" rel="noopener">
+            <span class="contact-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 20.5c-4.5 1.4-4.5-2.4-6.2-3M15 22v-3.6c0-1 .1-1.5-.5-2 2.3-.3 4.5-1.2 4.5-5.3a4.2 4.2 0 00-1.1-2.9 3.9 3.9 0 00-.1-2.9s-1.3-.4-4.2 1.6a10 10 0 00-5.2 0C5.5 4.9 4.2 5.3 4.2 5.3a3.9 3.9 0 00-.1 2.9A4.2 4.2 0 003 11.1c0 4.1 2.2 5 4.5 5.3-.6.5-.6 1.1-.5 2V22"/>
+              </svg>
+            </span>
+            <span class="contact-info">
+              <span class="contact-label">GitHub</span>
+              <span class="contact-value">github.com/yasin274</span>
+            </span>
+          </a>
+        </div>
       </div>
     </section>
 
   </main>
 
   <footer class="site-footer">
-    <span>© <span id="year">2026</span> Ясин · Портфолио</span>
-    <span class="footer-tech">Сверстано вручную · без фреймворков и зависимостей</span>
+    <div class="wrap footer-inner">
+      <span>© <span id="year">2026</span> Ясин · Веб-разработка на заказ</span>
+      <span class="footer-tech">Сверстано вручную · без фреймворков и зависимостей</span>
+    </div>
   </footer>
 
   <script src="script.js"></script>
