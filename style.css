@@ -557,6 +557,25 @@ h1, h2, h3 {
 }
 .case-text b { color: var(--text); font-weight: 600; }
 
+/* Скриншот кейса. width/height в разметке держат место до загрузки —
+   без этого страница дёргается (CLS). */
+.case-media {
+  margin: var(--s-3) 0 0;
+}
+.case-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+}
+.case-media figcaption {
+  margin-top: 10px;
+  font-size: 0.86rem;
+  color: var(--text-faint);
+}
+
 .case-facts {
   list-style: none;
   display: flex;
