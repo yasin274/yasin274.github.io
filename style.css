@@ -852,11 +852,107 @@ h1, h2, h3 {
     radial-gradient(ellipse 60% 100% at 50% 100%, var(--accent-soft), transparent 70%);
 }
 
+/* ============================================================
+   Форма заявки
+   ============================================================ */
+
+.lead-form {
+  margin-top: var(--s-4);
+  padding: var(--s-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  max-width: 760px;
+}
+
+.lead-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--s-3);
+}
+
+.lead-field { display: flex; flex-direction: column; margin-bottom: var(--s-3); }
+
+.lead-field label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 7px;
+}
+
+.lead-field input,
+.lead-field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: border-color var(--t), background var(--t);
+}
+.lead-field textarea { resize: vertical; min-height: 104px; line-height: 1.55; }
+
+.lead-field input::placeholder,
+.lead-field textarea::placeholder { color: var(--text-faint); }
+
+.lead-field input:focus,
+.lead-field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+/* Подсветка ошибки ставится только после попытки отправки, а не по мере
+   набора: краснеющее на каждом символе поле раздражает. */
+.lead-field.has-error input,
+.lead-field.has-error textarea { border-color: #f87171; }
+
+.lead-error {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  color: #fca5a5;
+  min-height: 1.1em;
+}
+
+/* Ловушка для ботов: вне экрана, но доступна для автозаполнения. */
+.lead-honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.lead-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.lead-status { font-size: 0.9rem; color: var(--text-muted); }
+.lead-status.is-ok { color: var(--money); }
+.lead-status.is-error { color: #fca5a5; }
+
+.contact-or {
+  margin-top: var(--s-5);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
 .contact-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--s-2);
-  margin-top: var(--s-4);
+  margin-top: var(--s-2);
 }
 
 .contact-card {

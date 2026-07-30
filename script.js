@@ -150,5 +150,105 @@ filters.forEach((btn) => {
   });
 });
 
+/* ---------- Lead form ----------
+   Отправка идёт в serverless-функцию, а не напрямую в Telegram: токен бота
+   нельзя держать в коде страницы, он виден любому посетителю.
+   Исходники функции: github.com/yasin274/lead-api */
+const LEAD_ENDPOINT = "https://lead-api-mocha.vercel.app/api/lead";
+const TELEGRAM_FALLBACK = "https://t.me/yasin2099";
+
+const leadForm = document.getElementById("lead-form");
+
+if (leadForm) {
+  // Время открытия формы: заполненная быстрее двух секунд — работа бота.
+  const openedAt = Date.now();
+
+  const statusEl = leadForm.querySelector(".lead-status");
+  const submitBtn = leadForm.querySelector("button[type=submit]");
+
+  const setStatus = (text, kind) => {
+    statusEl.textContent = text;
+    statusEl.classList.toggle("is-ok", kind === "ok");
+    statusEl.classList.toggle("is-error", kind === "error");
+  };
+
+  const clearErrors = () => {
+    leadForm.querySelectorAll(".lead-field").forEach((f) => f.classList.remove("has-error"));
+    leadForm.querySelectorAll(".lead-error").forEach((e) => (e.textContent = ""));
+  };
+
+  const showFieldError = (name, text) => {
+    const holder = leadForm.querySelector(`.lead-error[data-for="${name}"]`);
+    if (!holder) return;
+    holder.textContent = text;
+    holder.closest(".lead-field")?.classList.add("has-error");
+  };
+
+  leadForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    clearErrors();
+
+    const data = {
+      name: leadForm.elements.name.value.trim(),
+      contact: leadForm.elements.contact.value.trim(),
+      message: leadForm.elements.message.value.trim(),
+      honey: leadForm.elements.honey.value,
+      source: "portfolio",
+      openedAt,
+    };
+
+    // Проверяем на клиенте теми же правилами, что и на сервере: так человек
+    // видит ошибку сразу, без ожидания запроса. Серверная проверка остаётся —
+    // клиентскую можно обойти.
+    let hasError = false;
+    if (data.name.length < 2) {
+      showFieldError("name", "Как к вам обращаться?");
+      hasError = true;
+    }
+    if (data.contact.length < 3) {
+      showFieldError("contact", "Нужен способ связи");
+      hasError = true;
+    }
+    if (hasError) {
+      setStatus("", null);
+      return;
+    }
+
+    submitBtn.disabled = true;
+    setStatus("Отправляю…", null);
+
+    try {
+      const response = await fetch(LEAD_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const payload = await response.json().catch(() => ({}));
+
+      if (response.ok && payload.ok) {
+        leadForm.reset();
+        setStatus("Заявка отправлена — отвечу в течение дня.", "ok");
+        submitBtn.textContent = "Отправлено";
+        return;
+      }
+
+      if (payload.fields) {
+        Object.entries(payload.fields).forEach(([field, text]) => showFieldError(field, text));
+        setStatus("", null);
+        submitBtn.disabled = false;
+        return;
+      }
+
+      setStatus(payload.error || "Не получилось отправить. Напишите в Telegram.", "error");
+      submitBtn.disabled = false;
+    } catch {
+      // Сеть недоступна или функция не отвечает — даём прямой канал связи.
+      setStatus("Не получилось отправить. Напишите, пожалуйста, в Telegram: " + TELEGRAM_FALLBACK, "error");
+      submitBtn.disabled = false;
+    }
+  });
+}
+
 /* ---------- Footer year ---------- */
 document.getElementById("year").textContent = new Date().getFullYear();

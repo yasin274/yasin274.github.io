@@ -681,6 +681,47 @@
           и смета бесплатно, даже если потом решите делать не со мной.
         </p>
 
+        <form class="lead-form reveal" id="lead-form" novalidate>
+          <div class="lead-row">
+            <div class="lead-field">
+              <label for="lead-name">Как к вам обращаться</label>
+              <input id="lead-name" name="name" type="text" autocomplete="name"
+                     maxlength="100" required>
+              <span class="lead-error" data-for="name"></span>
+            </div>
+
+            <div class="lead-field">
+              <label for="lead-contact">Telegram, телефон или почта</label>
+              <input id="lead-contact" name="contact" type="text"
+                     placeholder="@nickname" maxlength="200" required>
+              <span class="lead-error" data-for="contact"></span>
+            </div>
+          </div>
+
+          <div class="lead-field">
+            <label for="lead-message">Что нужно сделать</label>
+            <textarea id="lead-message" name="message" rows="4" maxlength="2000"
+                      placeholder="Например: лендинг для студии детейлинга, тексты и фото есть, нужен к концу месяца"></textarea>
+          </div>
+
+          <!--
+            Honeypot: человек этого поля не видит и не заполняет, а
+            автозаполнитель — заполняет. Не display:none, потому что часть
+            ботов такие поля пропускает; убрано за пределы экрана.
+          -->
+          <div class="lead-honey" aria-hidden="true">
+            <label for="lead-company">Компания</label>
+            <input id="lead-company" name="honey" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="lead-actions">
+            <button class="btn btn-primary" type="submit">Отправить заявку</button>
+            <span class="lead-status" role="status" aria-live="polite"></span>
+          </div>
+        </form>
+
+        <p class="contact-or reveal">Или напрямую:</p>
+
         <div class="contact-cards reveal">
           <a class="contact-card contact-card-primary" href="https://t.me/yasin2099" target="_blank" rel="noopener">
             <span class="contact-icon" aria-hidden="true">
