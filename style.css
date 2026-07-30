@@ -872,6 +872,14 @@ h1, h2, h3 {
 }
 .contact-card:hover { transform: translateY(-3px); border-color: var(--accent); }
 
+/* Основной канал связи выделен: заказчик должен видеть, куда писать. */
+.contact-card-primary {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--accent-soft), transparent 60%), var(--surface-2);
+  box-shadow: 0 14px 34px -24px var(--accent-glow);
+}
+.contact-card-primary .contact-label { color: var(--accent); }
+
 .contact-info { display: flex; flex-direction: column; min-width: 0; }
 .contact-label {
   font-family: var(--font-mono);
