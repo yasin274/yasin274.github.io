@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кейс: калькулятор юнит-экономики Wildberries — Ясин</title>
+  <meta name="description" content="Как устроен сервис, который считает реальную прибыль продавца на Wildberries по всему каталогу сразу: задача, решения, проверенные цифры на каталоге из 679 позиций.">
+
+  <meta name="theme-color" content="#0b0f1a">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Кейс: калькулятор юнит-экономики Wildberries">
+  <meta property="og:description" content="679 позиций, 4 запроса к базе на весь каталог, массовый ввод себестоимости через Excel. Что нашлось в цифрах живого магазина.">
+  <meta property="og:url" content="https://yasin274.github.io/case-wb.html">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f1a'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5M18.5 8l-5 16' fill='none' stroke='%2338bdf8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Страница кейса переиспользует токены и типографику сайта.
+       Здесь только то, чего нет на главной. */
+
+    .case-hero { padding: 132px 0 56px; }
+    .case-hero .eyebrow { margin-bottom: 14px; }
+    .case-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.12;
+      margin: 0 0 18px;
+      letter-spacing: -0.02em;
+    }
+    .case-hero .lead {
+      font-size: clamp(16px, 2.2vw, 19px);
+      color: var(--text-muted);
+      max-width: 62ch;
+      margin: 0 0 30px;
+    }
+
+    /* Числа набраны моноширинным: цифры одной ширины не пляшут при чтении. */
+    .num-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin: 34px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .num-grid li {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .num-grid b {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 27px;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .num-grid span { color: var(--text-muted); font-size: 14px; line-height: 1.45; }
+
+    .case-body { max-width: 74ch; }
+    .case-body h2 {
+      font-family: var(--font-display);
+      font-size: clamp(21px, 3vw, 27px);
+      margin: 52px 0 16px;
+      letter-spacing: -0.01em;
+    }
+    .case-body h3 {
+      font-size: 17px;
+      margin: 30px 0 8px;
+      color: var(--text);
+    }
+    .case-body p { color: var(--text-muted); margin: 0 0 15px; line-height: 1.68; }
+    .case-body strong, .case-body b { color: var(--text); font-weight: 600; }
+    .case-body ul { color: var(--text-muted); line-height: 1.68; padding-left: 20px; }
+    .case-body li { margin-bottom: 9px; }
+
+    /* Выноска для главного вывода — того, ради чего кейс и читают. */
+    .pull {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-soft);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 18px 22px;
+      margin: 26px 0;
+    }
+    .pull p { color: var(--text); margin: 0; font-size: 17px; line-height: 1.6; }
+
+    .ledger {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0 8px;
+      font-size: 15px;
+    }
+    .ledger th, .ledger td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .ledger th { color: var(--text-faint); font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+    .ledger td:last-child, .ledger th:last-child { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+    .ledger tr:last-child td { border-bottom: none; font-weight: 600; color: var(--text); }
+    .loss { color: #f87171; }
+    .table-scroll { overflow-x: auto; }
+
+    /* Заголовок таблицы для скринридера: видящий понимает её из текста рядом,
+       слушающий — нет, а таблица без подписи в озвучке повисает в воздухе. */
+    .visually-hidden {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .case-cta {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px;
+      margin: 56px 0 0;
+    }
+    .case-cta h2 { margin-top: 0; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      margin-bottom: 26px;
+      transition: color var(--t);
+    }
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      .case-hero { padding: 108px 0 40px; }
+      .case-cta { padding: 22px; }
+    }
+  </style>
+  <!-- Класса js здесь намеренно нет: он включает скрытие блоков до появления,
+       а script.js на этой странице не подключён — контент остался бы невидимым. -->
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Перейти к содержанию</a>
+
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html" aria-label="На главную">
+        <span class="nav-logo-mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="nav-logo-text">yasin<span class="accent">274</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Основная навигация">
+        <a href="index.html#services">Услуги</a>
+        <a href="index.html#cases">Кейсы</a>
+        <a href="index.html#about">Обо мне</a>
+      </nav>
+      <a class="btn btn-primary btn-sm nav-cta" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="section case-hero">
+      <div class="wrap">
+        <a class="back-link" href="index.html#cases">← Все кейсы</a>
+        <p class="eyebrow">Кейс · собственный продукт</p>
+        <h1>Калькулятор юнит-экономики Wildberries</h1>
+        <p class="lead">
+          Продавец видит в кабинете Wildberries выручку, а не прибыль. Сервис
+          считает, сколько на самом деле остаётся с каждого товара — и делает
+          это сразу по всему каталогу, а не по одной позиции.
+        </p>
+
+        <ul class="num-grid">
+          <li><b>679</b><span>позиций в каталоге, на котором всё проверялось</span></li>
+          <li><b>4</b><span>запроса к базе на весь каталог, сколько бы в нём ни было товаров</span></li>
+          <li><b>341 мс</b><span>на запись 838 значений себестоимости</span></li>
+          <li><b>21 / 21</b><span>автопроверок импорта проходят на живых данных</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="wrap case-body">
+
+        <h2>Задача</h2>
+        <p>
+          Wildberries удерживает с продажи комиссию категории, логистику,
+          хранение, приёмку, возвраты, эквайринг, штрафы — каждое своей
+          формулой и своей строкой в отчёте. Логистика зависит от объёма
+          упаковки и коэффициента конкретного склада, а он гуляет от 75 % до
+          445 %. Свести это в одну цифру в Excel можно, но каждый раз заново и
+          с ошибками.
+        </p>
+        <p>
+          Свести один товар — полдня. Свести шестьсот — не сделает никто.
+          Поэтому продавцы обычно не знают, какие позиции их кормят, а какие
+          проедают.
+        </p>
+
+        <h2>Что оказалось настоящей проблемой</h2>
+        <p>
+          Считать маржу я научился быстро. Дальше выяснилось, что считать
+          нечего: <b>у 383 позиций из 679 вообще не было цены</b>, а
+          себестоимость стояла у одной. Формулы были готовы, а данных под них
+          не существовало.
+        </p>
+        <p>
+          Это и определило остальную работу. Красивый расчёт по одному товару
+          бесполезен, если продавец не может за разумное время внести данные по
+          всему ассортименту.
+        </p>
+
+        <h3>Массовый ввод через Excel — в два конца</h3>
+        <p>
+          Продавец скачивает файл со <em>своими</em> артикулами, заполняет
+          столбцы и загружает обратно. Сопоставление при таком порядке просто
+          не возникает — артикулы в файле уже правильные.
+        </p>
+        <p>
+          Между загрузкой и записью обязательный предпросмотр: что именно
+          изменится и на что. Импорт переписывает данные по всему каталогу, и
+          сдвинутый на одну колонку файл испортил бы расчёты по сотням позиций
+          молча. Отдельно ловятся типовые беды живых таблиц: «1 200,50 ₽» с
+          неразрывным пробелом читается как число, пустая ячейка означает
+          «пропустить», а не «обнулить», а цена 1500, попавшая в графу
+          «Выкуп, %», отклоняется как неправдоподобная.
+        </p>
+
+        <h3>Расчёт по всему каталогу за четыре запроса</h3>
+        <p>
+          Наивное решение — цикл по товарам — дало бы 1358 обращений к базе на
+          679 позиций и минуты ожидания. Вместо этого комиссии тянутся одним
+          запросом по уникальным предметам, тарифы склада — один раз, цены —
+          одной выборкой из отчётов о реализации. <b>Четыре запроса
+          независимо от того, сто товаров или десять тысяч.</b>
+        </p>
+
+        <h2>Что нашлось в цифрах</h2>
+        <p>
+          После первого заполнения данных посчиталось 185 позиций: 78 в минусе,
+          26 на тонкой марже, 81 здоровых. Но интереснее оказался не счёт, а
+          закономерность.
+        </p>
+
+        <div class="table-scroll">
+          <table class="ledger">
+            <caption class="visually-hidden">Разбор убыточной позиции</caption>
+            <thead>
+              <tr><th>Позиция каталога</th><th>₽</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Цена продажи</td><td>108,00</td></tr>
+              <tr><td>Себестоимость</td><td>50,00</td></tr>
+              <tr><td>Комиссия, логистика, хранение, возвраты</td><td>164,00</td></tr>
+              <tr><td class="loss">Убыток с продажи</td><td class="loss">−106,00</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pull">
+          <p>
+            Себестоимость здесь — только 50 ₽ из 106 ₽ убытка. Значит
+            <b>даже при нулевой себестоимости товар терял бы 56 ₽ с каждой
+            продажи.</b> Дешёвая мелочёвка на FBO не отбивает доставку, чем бы
+            её ни наполнили.
+          </p>
+        </div>
+
+        <p>
+          Это вывод, который нельзя получить из отчёта Wildberries и который
+          меняет решение: тут спор не про закупочные цены, а про то, что таким
+          позициям не место в ассортименте — или их надо собирать в наборы,
+          или поднимать цену.
+        </p>
+
+        <h2>Как проверялось</h2>
+        <p>
+          Сервис работает с деньгами, поэтому проверки писались не после, а
+          вместе с кодом — и прогонялись на живом каталоге, а не на трёх
+          выдуманных товарах:
+        </p>
+        <ul>
+          <li>21 сценарий импорта: разбор грязных чисел, отклонение сдвинутых
+              столбцов и мусора, отсутствие записи до подтверждения, приоритет
+              источников цены в обе стороны;</li>
+          <li>24 сценария админ-панели: блокировка пользователя действует
+              немедленно, чужие данные недоступны, роль проверяется на каждом
+              запросе;</li>
+          <li>резервное копирование проверено обратной операцией —
+              восстановление прогоняется в транзакции и откатывается, чтобы
+              убедиться, что копия читается.</li>
+        </ul>
+        <p>
+          Отдельный класс ошибок вылез только на объёме: первая версия импорта
+          обновляла товары по одному и падала на 679 позициях по таймауту
+          транзакции через 7,5 секунды. Переписал на один запрос
+          <em>на поле</em> вместо запроса на товар — те же 838 изменений стали
+          применяться <b>за 341 мс</b>.
+        </p>
+
+        <h2>Стек</h2>
+        <ul class="case-tags">
+          <li>TypeScript</li><li>Node.js</li><li>Express 5</li>
+          <li>Prisma 7</li><li>PostgreSQL</li><li>React</li>
+          <li>Zod</li><li>JWT</li><li>ExcelJS</li>
+        </ul>
+        <p style="margin-top:16px">
+          Развёрнут и работает. Тарифы Wildberries обновляются по расписанию,
+          API-ключи продавца шифруются AES-256-GCM, есть админ-панель, оферта
+          и политика обработки данных.
+        </p>
+
+        <div class="case-cta">
+          <h2>Нужен такой же расчёт под ваш магазин?</h2>
+          <p>
+            Юнит-экономика считается по одним и тем же правилам, но у каждого
+            продавца свои склады, категории и способ вести себестоимость.
+            Напишите — посчитаю ваш ассортимент и скажу, что имеет смысл
+            доработать. Разбор бесплатный.
+          </p>
+          <div class="hero-actions" style="margin-top:20px">
+            <a class="btn btn-primary" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать в Telegram</a>
+            <a class="btn btn-ghost" href="index.html#cases">Другие работы</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>© <span id="year">2026</span> Ясин · Веб-разработка на заказ</span>
+      <span class="footer-tech">Сверстано вручную · без фреймворков и зависимостей</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
