@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кейс: Finpath — дашборд личных финансов — Ясин</title>
+  <meta name="description" content="Финансовый дашборд с настоящим бэкендом: счета, операции и сводки из базы. Почему деньги хранятся Decimal, а не Float, и почему сумма всегда положительная.">
+
+  <meta name="theme-color" content="#0b0f1a">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Кейс: Finpath — дашборд личных финансов">
+  <meta property="og:description" content="Год операций, 12 месяцев аналитики, ноль зависимостей на фронтенде. И разбор решений, из-за которых деньги не разъезжаются в копейках.">
+  <meta property="og:url" content="https://yasin274.github.io/case-finpath.html">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f1a'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5M18.5 8l-5 16' fill='none' stroke='%2338bdf8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Та же типографика, что в двух других кейсах — серия должна читаться
+       как одна работа, а не как три разные страницы. */
+    .case-hero { padding: 132px 0 56px; }
+    .case-hero .eyebrow { margin-bottom: 14px; }
+    .case-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.12;
+      margin: 0 0 18px;
+      letter-spacing: -0.02em;
+    }
+    .case-hero .lead {
+      font-size: clamp(16px, 2.2vw, 19px);
+      color: var(--text-muted);
+      max-width: 62ch;
+      margin: 0 0 30px;
+    }
+
+    .num-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin: 34px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .num-grid li {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .num-grid b {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 27px;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .num-grid span { color: var(--text-muted); font-size: 14px; line-height: 1.45; }
+
+    .case-body { max-width: 74ch; }
+    .case-body h2 {
+      font-family: var(--font-display);
+      font-size: clamp(21px, 3vw, 27px);
+      margin: 52px 0 16px;
+      letter-spacing: -0.01em;
+    }
+    .case-body h3 { font-size: 17px; margin: 30px 0 8px; color: var(--text); }
+    .case-body p { color: var(--text-muted); margin: 0 0 15px; line-height: 1.68; }
+    .case-body strong, .case-body b { color: var(--text); font-weight: 600; }
+    .case-body ul { color: var(--text-muted); line-height: 1.68; padding-left: 20px; }
+    .case-body li { margin-bottom: 9px; }
+    .case-body code {
+      font-family: var(--font-mono);
+      font-size: 0.92em;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1px 5px;
+      color: var(--text);
+    }
+
+    .pull {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-soft);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 18px 22px;
+      margin: 26px 0;
+    }
+    .pull p { color: var(--text); margin: 0; font-size: 17px; line-height: 1.6; }
+
+    .ledger {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0 8px;
+      font-size: 15px;
+    }
+    .ledger th, .ledger td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .ledger th { color: var(--text-faint); font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+    .ledger td:last-child, .ledger th:last-child { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+    .ledger tr:last-child td { border-bottom: none; font-weight: 600; color: var(--text); }
+    .table-scroll { overflow-x: auto; }
+
+    /* Скриншот шире текстовой колонки: в 74 символа интерфейс нечитаем.
+       Ширина ограничена окном минус поля, поэтому вбок ничего не выезжает. */
+    .shot {
+      width: min(1040px, calc(100vw - 48px));
+      margin: 34px 0 34px 50%;
+      transform: translateX(-50%);
+    }
+    .shot img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-soft);
+    }
+    .shot figcaption {
+      color: var(--text-faint);
+      font-size: 14px;
+      line-height: 1.55;
+      margin-top: 10px;
+    }
+
+    .case-cta {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px;
+      margin: 56px 0 0;
+    }
+    .case-cta h2 { margin-top: 0; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      margin-bottom: 26px;
+      transition: color var(--t);
+    }
+    .back-link:hover { color: var(--accent); }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 640px) {
+      .case-hero { padding: 108px 0 40px; }
+      .case-cta { padding: 22px; }
+    }
+  </style>
+  <!-- Класса js здесь намеренно нет: он включает скрытие блоков до появления,
+       а script.js на этой странице не подключён — контент остался бы невидимым. -->
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Перейти к содержанию</a>
+
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html" aria-label="На главную">
+        <span class="nav-logo-mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="nav-logo-text">yasin<span class="accent">274</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Основная навигация">
+        <a href="index.html#services">Услуги</a>
+        <a href="index.html#cases">Кейсы</a>
+        <a href="index.html#about">Обо мне</a>
+      </nav>
+      <a class="btn btn-primary btn-sm nav-cta" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="section case-hero">
+      <div class="wrap">
+        <a class="back-link" href="index.html#cases">← Все кейсы</a>
+        <p class="eyebrow">Кейс · веб-приложение</p>
+        <h1>Finpath — дашборд личных финансов</h1>
+        <p class="lead">
+          Приложение, где деньги не просто показаны, а посчитаны: счета,
+          операции и аналитика приходят из базы, а не из вёрстки. Можно зайти
+          демо-аккаунтом и покрутить настоящий интерфейс с годом операций.
+        </p>
+
+        <ul class="num-grid">
+          <li><b>12</b><span>месяцев операций в демо-аккаунте</span></li>
+          <li><b>0</b><span>зависимостей на фронтенде — ни сборки, ни фреймворка</span></li>
+          <li><b>306 550,40 ₽</b><span>баланс сходится с суммой трёх счетов до копейки</span></li>
+          <li><b>4</b><span>решения в модели данных, без которых цифры разъезжаются</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="wrap case-body">
+
+        <h2>Задача</h2>
+        <p>
+          Сделать не «страницу про финансы», а рабочий инструмент: пользователь
+          заводит счета, вносит операции и видит, куда уходят деньги. Дизайн
+          при этом должен остаться на уровне продуктового, а не админки.
+        </p>
+        <p>
+          Отдельное условие — фронтенд без сборки и зависимостей. Такой проект
+          открывается мгновенно, живёт на любом хостинге и не ломается через
+          год из-за обновления фреймворка.
+        </p>
+
+        <figure class="shot">
+          <img src="images/finpath-landing.png" width="1200" height="1500"
+               loading="lazy" decoding="async"
+               alt="Первый экран Finpath: тёмная тема, заголовок «Аналитика, карты и ИИ в одном дашборде», кнопки «Попробовать бесплатно» и «Как это работает», ниже превью дашборда с общим балансом, диаграммой распределения, списком инвестиций и панелью ИИ-ассистента.">
+          <figcaption>
+            Ни одной картинки: диаграмма баланса — SVG-круги под фильтром
+            размытия, из-за которого между ними появляются перетяжки. Заливка
+            задана переменными, поэтому фигура сама подхватывает светлую тему.
+          </figcaption>
+        </figure>
+
+        <h2>Четыре решения в модели данных</h2>
+        <p>
+          Приложение про деньги ломается не в интерфейсе, а в том, как деньги
+          хранятся. Четыре вещи, заложенные сразу, потому что переделывать их
+          позже — это миграция с простоем:
+        </p>
+
+        <h3>1. Суммы хранятся <code>Decimal</code>, а не <code>Float</code></h3>
+        <p>
+          Двоичная плавающая точка не представляет 0.1 точно. На коротком
+          списке этого не видно, а на длинной ленте операций остаток начинает
+          расходиться с суммой строк в копейках — и сходится только после
+          ручной сверки. Для денег это неприемлемо, поэтому в базе
+          <code>Decimal(14,2)</code>, а наружу отдаётся обычное число.
+        </p>
+
+        <h3>2. Сумма всегда положительная, направление задаёт тип</h3>
+        <p>
+          Соблазн хранить расход минусом велик, но тогда знак в сумме и
+          отдельное поле типа — это <b>два источника правды, которые рано или
+          поздно разойдутся</b>: расход с плюсом попадёт в доходы и тихо
+          испортит всю аналитику. Поэтому сумма — модуль, а знак вычисляется
+          из типа в одном месте.
+        </p>
+
+        <h3>3. Дата операции отдельно от даты внесения</h3>
+        <p>
+          <code>occurredAt</code> — когда деньги ушли, <code>createdAt</code> —
+          когда запись внесли. Для операции задним числом это разные дни, и
+          все отчёты строятся по первой. Спутать их — значит получить отчёт,
+          где вчерашняя покупка попала в сегодняшний месяц.
+        </p>
+
+        <h3>4. Удаление категории не уносит операции</h3>
+        <p>
+          Деньги были потрачены, даже если рубрику потом упразднили. Поэтому
+          при удалении категории связь обнуляется, а операция остаётся — иначе
+          чистка справочника молча стирала бы часть истории расходов.
+        </p>
+
+        <h2>Что видно на экране</h2>
+        <p>
+          Сводка сходится сама с собой, и это первое, что стоит проверять в
+          финансовом приложении:
+        </p>
+
+        <div class="table-scroll">
+          <table class="ledger">
+            <caption class="visually-hidden">Годовая сводка демо-аккаунта</caption>
+            <thead>
+              <tr><th>Показатель за год</th><th>₽</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Доход</td><td>1 332 700,00</td></tr>
+              <tr><td>Расход</td><td>632 031,47</td></tr>
+              <tr><td>Накопления</td><td>700 668,53</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pull">
+          <p>
+            1 332 700 − 632 031,47 даёт ровно 700 668,53. Сходимость не
+            подрисована: все три числа считает база отдельными запросами, и
+            расхождение сразу показало бы ошибку в модели.
+          </p>
+        </div>
+
+        <figure class="shot">
+          <img src="images/finpath-dashboard.png" width="1384" height="1605"
+               loading="lazy" decoding="async"
+               alt="Дашборд после входа: общий баланс 306 550,40 ₽ с диаграммой распределения по трём счетам, список инвестиций, панель ИИ-ассистента, столбчатый график денежного потока за двенадцать месяцев, лента операций с датами и суммами, карты, цели накоплений и разбивка расходов по категориям.">
+          <figcaption>
+            Дашборд после входа демо-аккаунтом. Баланс, лента операций,
+            денежный поток и категории расходов приходят из базы; инвестиции,
+            цели и ассистент пока демонстрационные — об этом честно сказано
+            в подписи внизу страницы.
+          </figcaption>
+        </figure>
+
+        <h2>Гостевой режим — это сама вёрстка</h2>
+        <p>
+          Без входа дашборд показывает демонстрационные данные, и они лежат
+          прямо в разметке. Второй их экземпляр в скрипте неизбежно разошёлся
+          бы с первым, а ссылка «Открыть демо» с лендинга не должна упираться
+          ни в пустой экран, ни в форму входа. После входа те же блоки
+          заполняются из API.
+        </p>
+
+        <h2>Что вскрылось при первом живом запуске</h2>
+        <p>
+          Пока приложение работало на выдуманных данных, всё выглядело
+          прилично. Настоящая база показала два изъяна, которых не видно ни
+          на типах, ни на сборке:
+        </p>
+        <ul>
+          <li>годовой график строился по трём засеянным месяцам — девять
+              столбцов из двенадцати стояли нулями. Считал верно, а выглядел
+              сломанным;</li>
+          <li>после заполнения года доход из двух ровных слагаемых дал почти
+              прямую линию: разброс 6 %. Нерегулярная подработка исправила
+              картину — стало <b>96 000 … 138 000</b>, и график наконец
+              показывает то, ради чего его смотрят.</li>
+        </ul>
+        <p>
+          Заодно нашлась ошибка доступности: переключатель «Доход / Расход /
+          Накопления» менял только цвет кнопки, без <code>aria-pressed</code>.
+          Скринридер объявлял все три вкладки одинаково — выбранную было не
+          отличить.
+        </p>
+
+        <h2>Как развёрнуто</h2>
+        <p>
+          Страницы отдаются с GitHub Pages, бэкенд — отдельным сервисом.
+          Разделение вынужденное: сборщик хостинга кладёт в функцию только то,
+          что прослеживается из кода, и статику внутрь неё не уместить.
+          Побочный плюс — страницы грузятся с ближайшей точки и не будят
+          сервер.
+        </p>
+
+        <h2>Стек</h2>
+        <ul class="case-tags">
+          <li>HTML5</li><li>CSS3</li><li>Vanilla JS</li>
+          <li>TypeScript</li><li>Node.js</li><li>Express 5</li>
+          <li>Prisma 7</li><li>PostgreSQL</li><li>Zod</li><li>JWT</li>
+        </ul>
+        <p style="margin-top:16px">
+          Пароли хранятся хешами bcrypt, вход по JWT, чужие данные недоступны:
+          каждый запрос ограничен владельцем.
+        </p>
+        <p style="color:var(--text-faint);font-size:14px">
+          Работа учебная, не по заказу клиента. Интерфейс — реализация чужого
+          дизайн-концепта:
+          <a href="https://www.behance.net/gallery/248420885/Finpath-I-AI-Powered-Finance-SaaS-Dashboard-UIUX" target="_blank" rel="noopener">Finpath</a>,
+          автор макета Kateryna Sharova. Вёрстка, бэкенд и модель данных — мои.
+        </p>
+
+        <div class="case-cta">
+          <h2>Нужен сервис с личным кабинетом?</h2>
+          <p>
+            Регистрация, вход, свои данные у каждого пользователя, расчёты и
+            отчёты — это ровно та задача, которую решает Finpath. Опишите, что
+            нужно считать и кому показывать, — скажу срок и цену. Разбор
+            бесплатный.
+          </p>
+          <div class="hero-actions" style="margin-top:20px">
+            <a class="btn btn-primary" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать в Telegram</a>
+            <a class="btn btn-ghost" href="https://yasin274.github.io/finpath/dashboard.html" target="_blank" rel="noopener">Открыть дашборд ↗</a>
+          </div>
+          <p style="margin:16px 0 0;font-size:14px;color:var(--text-faint)">
+            Демо-вход: <code>demo@finpath.app</code> / <code>demo12345</code>
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>© <span id="year">2026</span> Ясин · Веб-разработка на заказ</span>
+      <span class="footer-tech">Сверстано вручную · без фреймворков и зависимостей</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
