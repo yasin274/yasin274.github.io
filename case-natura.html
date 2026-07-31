@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кейс: Natura — лендинг, который принимает заказы — Ясин</title>
+  <meta name="description" content="Как лендинг мебельной мастерской перестал быть страницей: каталог из базы, корзина, оформление заказа с уведомлением в Telegram и админка. Проверенный порядок работы и защита формы.">
+
+  <meta name="theme-color" content="#0b0f1a">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Кейс: Natura — лендинг, который принимает заказы">
+  <meta property="og:description" content="Каталог из базы, корзина, заказ в Telegram. Почему магазин остаётся живым, даже когда сервер лежит.">
+  <meta property="og:url" content="https://yasin274.github.io/case-natura.html">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f1a'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5M18.5 8l-5 16' fill='none' stroke='%2338bdf8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Та же типографика, что в кейсе калькулятора — страницы должны
+       читаться как одна серия, а не как две разные работы. */
+    .case-hero { padding: 132px 0 56px; }
+    .case-hero .eyebrow { margin-bottom: 14px; }
+    .case-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.12;
+      margin: 0 0 18px;
+      letter-spacing: -0.02em;
+    }
+    .case-hero .lead {
+      font-size: clamp(16px, 2.2vw, 19px);
+      color: var(--text-muted);
+      max-width: 62ch;
+      margin: 0 0 30px;
+    }
+
+    .num-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin: 34px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .num-grid li {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .num-grid b {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 27px;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .num-grid span { color: var(--text-muted); font-size: 14px; line-height: 1.45; }
+
+    .case-body { max-width: 74ch; }
+    .case-body h2 {
+      font-family: var(--font-display);
+      font-size: clamp(21px, 3vw, 27px);
+      margin: 52px 0 16px;
+      letter-spacing: -0.01em;
+    }
+    .case-body h3 { font-size: 17px; margin: 30px 0 8px; color: var(--text); }
+    .case-body p { color: var(--text-muted); margin: 0 0 15px; line-height: 1.68; }
+    .case-body strong, .case-body b { color: var(--text); font-weight: 600; }
+    .case-body ul { color: var(--text-muted); line-height: 1.68; padding-left: 20px; }
+    .case-body li { margin-bottom: 9px; }
+
+    .pull {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-soft);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 18px 22px;
+      margin: 26px 0;
+    }
+    .pull p { color: var(--text); margin: 0; font-size: 17px; line-height: 1.6; }
+
+    /* Скриншот шире текстовой колонки: в 74 символа интерфейс нечитаем.
+       Ширина ограничена окном минус поля, поэтому вбок ничего не выезжает. */
+    .shot {
+      width: min(1040px, calc(100vw - 48px));
+      margin: 34px 0 34px 50%;
+      transform: translateX(-50%);
+    }
+    .shot img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-soft);
+    }
+    .shot figcaption {
+      color: var(--text-faint);
+      font-size: 14px;
+      line-height: 1.55;
+      margin-top: 10px;
+    }
+
+    .case-cta {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px;
+      margin: 56px 0 0;
+    }
+    .case-cta h2 { margin-top: 0; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      margin-bottom: 26px;
+      transition: color var(--t);
+    }
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      .case-hero { padding: 108px 0 40px; }
+      .case-cta { padding: 22px; }
+    }
+  </style>
+  <!-- Класса js здесь намеренно нет: он включает скрытие блоков до появления,
+       а script.js на этой странице не подключён — контент остался бы невидимым. -->
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Перейти к содержанию</a>
+
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html" aria-label="На главную">
+        <span class="nav-logo-mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="nav-logo-text">yasin<span class="accent">274</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Основная навигация">
+        <a href="index.html#services">Услуги</a>
+        <a href="index.html#cases">Кейсы</a>
+        <a href="index.html#about">Обо мне</a>
+      </nav>
+      <a class="btn btn-primary btn-sm nav-cta" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="section case-hero">
+      <div class="wrap">
+        <a class="back-link" href="index.html#cases">← Все кейсы</a>
+        <p class="eyebrow">Кейс · интернет-магазин</p>
+        <h1>Natura — лендинг, который принимает заказы</h1>
+        <p class="lead">
+          Красивая страница показывает товар. Магазин — продаёт его. Разница
+          в том, что происходит после нажатия «в корзину»: каталог из базы,
+          заказ на сервере, уведомление владельцу и админка, где заказ видно.
+        </p>
+
+        <ul class="num-grid">
+          <li><b>13</b><span>товаров в каталоге, 8 категорий со счётчиками</span></li>
+          <li><b>0</b><span>зависимостей на фронтенде — ни сборки, ни фреймворка</span></li>
+          <li><b>3</b><span>рубежа защиты формы заказа от ботов и чужих сайтов</span></li>
+          <li><b>219 700 ₽</b><span>сумма проверочного заказа сошлась до рубля</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="wrap case-body">
+
+        <h2>Задача</h2>
+        <p>
+          У мебельной мастерской была вёрстка: красивый первый экран, карточки
+          товаров, прайс. Заказать было нельзя — товары лежали прямо в
+          разметке, а «купить» никуда не вело. Чтобы добавить позицию или
+          поменять цену, нужно было править HTML.
+        </p>
+        <p>
+          Задача звучала как «прикрутить корзину», но настоящая была другая:
+          сделать так, чтобы владелец мог управлять каталогом без
+          разработчика, а заказ доходил до него быстрее, чем покупатель успеет
+          передумать.
+        </p>
+
+        <h2>Что сделано</h2>
+
+        <h3>Каталог переехал в базу</h3>
+        <p>
+          Товары, категории, цены, скидки и наличие теперь в PostgreSQL.
+          Фильтры по категориям считают количество сами, «нет в наличии»
+          выключает кнопку заказа, зачёркнутая старая цена появляется, только
+          если скидка реально есть.
+        </p>
+
+        <figure class="shot">
+          <img src="images/natura-catalog.png" width="1100" height="1800"
+               loading="lazy" decoding="async"
+               alt="Главная страница Natura: первый экран с фотографией гостиной и заголовком «Создано для комфорта. Сделано для жизни», плитки категорий, ниже раздел «Всё, что можно заказать» с фильтрами по категориям и счётчиками и карточками товаров с фотографиями, ценами и скидками.">
+          <figcaption>
+            Каталог собирается из базы: фильтры со счётчиками, скидки, наличие.
+            Чтобы добавить товар, владельцу больше не нужен разработчик.
+          </figcaption>
+        </figure>
+
+        <h3>Корзина и оформление</h3>
+        <p>
+          Корзина живёт в браузере покупателя, поэтому не теряется при
+          перезагрузке и не требует регистрации. Но <b>цену при оформлении
+          сервер берёт из базы по идентификатору товара</b>, а не из того,
+          что прислал браузер. Иначе достаточно было бы открыть инструменты
+          разработчика и купить диван за рубль.
+        </p>
+
+        <figure class="shot">
+          <img src="images/natura-cart.png" width="1384" height="905"
+               loading="lazy" decoding="async"
+               alt="Открытая панель «Ваш заказ»: две позиции — диван «Луна» 89 900 ₽ за штуку и диван «Норд» 64 900 ₽ в количестве двух, итого 219 700 ₽. Ниже поля «Как к вам обращаться», контакт, комментарий, отметка согласия на обработку данных со ссылкой на политику и кнопка «Оформить заказ».">
+          <figcaption>
+            Форма спрашивает минимум: имя и любой контакт. Каждое лишнее поле
+            в форме заказа — это часть покупателей, которые её не заполнят.
+          </figcaption>
+        </figure>
+
+        <h3>Заказ уходит в Telegram</h3>
+        <p>
+          Заказ сохраняется в базу и параллельно отправляется владельцу в
+          Telegram. Порядок именно такой: если мессенджер недоступен, заказ
+          всё равно сохранён, и его видно в админке. Наоборот было бы хуже —
+          уведомление пришло, а заказа нигде нет.
+        </p>
+
+        <h2>Защита формы</h2>
+        <p>
+          Форма заказа открыта миру, поэтому её проверяют тремя рубежами.
+          Все три проверены на живом сервере:
+        </p>
+        <ul>
+          <li><b>Ловушка для ботов</b> — поле, спрятанное в разметке. Человек
+              его не видит, автозаполнитель заполняет. Заполнено — заказ
+              молча отбрасывается;</li>
+          <li><b>Отсечка по времени</b> — форма, отправленная быстрее пары
+              секунд после открытия, заполнена не руками;</li>
+          <li><b>Проверка источника</b> — запрос с чужого сайта или совсем без
+              указания источника отклоняется на сервере.</li>
+        </ul>
+
+        <div class="pull">
+          <p>
+            Первые два случая отвечают «принято» и тихо выбрасывают заказ.
+            Это не небрежность: бот, получивший отказ, подбирает обход, а бот,
+            получивший «спасибо», уходит довольным.
+          </p>
+        </div>
+
+        <h2>Почему сайт остаётся живым, когда сервер лежит</h2>
+        <p>
+          Всё, что зависит от сервера, вынесено в отдельный файл и отделено от
+          кода, который оформляет страницу. Если бэкенд недоступен, ломается
+          только каталог — на его месте появляется телефон магазина, а
+          остальная страница работает как обычно.
+        </p>
+        <p>
+          То же самое с фотографиями: файл сначала загружается, и только после
+          успеха подставляется фоном. Нет файла — остаётся аккуратная
+          иллюстрация, а не битая картинка.
+        </p>
+
+        <h2>Что вскрылось по дороге</h2>
+        <p>
+          База не подключалась: соединение устанавливалось, а на первый же
+          пакет протокола сервер молча отключался. Диагностика вручную на
+          четырёх адресах показала, что дело не в базе и не в её регионе —
+          <b>у провайдера закрыт порт 5432</b>, стандартный порт PostgreSQL.
+        </p>
+        <p>
+          Решилось сменой транспорта: драйвер несёт тот же протокол внутри
+          WebSocket поверх 443 — порта, который открыт везде. Логика запросов
+          не изменилась ни на строку.
+        </p>
+
+        <h2>Стек</h2>
+        <ul class="case-tags">
+          <li>HTML5</li><li>CSS3</li><li>Vanilla JS</li>
+          <li>TypeScript</li><li>Node.js</li><li>Express 5</li>
+          <li>Prisma 7</li><li>PostgreSQL</li><li>Zod</li><li>JWT</li>
+        </ul>
+        <p style="margin-top:16px">
+          Фронтенд без единой зависимости: ни сборки, ни фреймворка — страница
+          открывается быстро и живёт на любом хостинге. Бэкенд отдельным
+          сервисом, его можно заменить или отключить, не трогая сайт.
+        </p>
+        <p class="case-note" style="color:var(--text-faint);font-size:14px">
+          Работа учебная, не по заказу клиента: магазин вымышленный, фотографии
+          со стока. Код, каталог и оформление заказа — настоящие и работают.
+        </p>
+
+        <div class="case-cta">
+          <h2>Нужен сайт, который принимает заказы?</h2>
+          <p>
+            Если у вас уже есть страница, её обычно можно достроить, а не
+            переделывать: добавить каталог, корзину и уведомления к тому, что
+            есть. Напишите, что нужно — скажу, сколько это займёт и будет
+            стоить. Разбор задачи бесплатный.
+          </p>
+          <div class="hero-actions" style="margin-top:20px">
+            <a class="btn btn-primary" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать в Telegram</a>
+            <a class="btn btn-ghost" href="case-wb.html">Другой кейс</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>© <span id="year">2026</span> Ясин · Веб-разработка на заказ</span>
+      <span class="footer-tech">Сверстано вручную · без фреймворков и зависимостей</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
