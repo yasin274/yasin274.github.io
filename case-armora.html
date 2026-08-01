@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кейс: ARMORA — сайт студии оклейки авто — Ясин</title>
+<meta name="description" content="Шестистраничный сайт студии защиты кузова плёнкой: калькулятор за три шага, смена акцента с малинового на золотой и проверка 427 элементов на контраст.">
+
+<meta name="theme-color" content="#0b0f1a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Кейс: ARMORA — сайт студии оклейки авто">
+<meta property="og:description" content="Калькулятор за три шага, шесть страниц, ноль зависимостей. И почему смена цвета починила контраст.">
+<meta property="og:url" content="https://yasin274.github.io/case-armora.html">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f1a'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5M18.5 8l-5 16' fill='none' stroke='%2338bdf8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="style.css">
+
+<style>
+  /* Та же типографика, что в остальных кейсах — серия должна читаться
+     как одна работа, а не как пять разных страниц. */
+  .case-hero { padding: 132px 0 56px; }
+  .case-hero .eyebrow { margin-bottom: 14px; }
+  .case-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 5vw, 48px);
+    line-height: 1.12;
+    margin: 0 0 18px;
+    letter-spacing: -0.02em;
+  }
+  .case-hero .lead {
+    font-size: clamp(16px, 2.2vw, 19px);
+    color: var(--text-muted);
+    max-width: 62ch;
+    margin: 0 0 30px;
+  }
+
+  .num-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin: 34px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .num-grid li {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .num-grid b {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 27px;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .num-grid span { color: var(--text-muted); font-size: 14px; line-height: 1.45; }
+
+  .case-body { max-width: 74ch; }
+  .case-body h2 {
+    font-family: var(--font-display);
+    font-size: clamp(21px, 3vw, 27px);
+    margin: 52px 0 16px;
+    letter-spacing: -0.01em;
+  }
+  .case-body h3 { font-size: 17px; margin: 30px 0 8px; color: var(--text); }
+  .case-body p { color: var(--text-muted); margin: 0 0 15px; line-height: 1.68; }
+  .case-body strong, .case-body b { color: var(--text); font-weight: 600; }
+  .case-body ul { color: var(--text-muted); line-height: 1.68; padding-left: 20px; }
+  .case-body li { margin-bottom: 9px; }
+  .case-body code {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1px 5px;
+    color: var(--text);
+  }
+
+  .pull {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 18px 22px;
+    margin: 26px 0;
+  }
+  .pull p { color: var(--text); margin: 0; font-size: 17px; line-height: 1.6; }
+
+  .ledger { width: 100%; border-collapse: collapse; margin: 20px 0 8px; font-size: 15px; }
+  .ledger th, .ledger td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+  .ledger th { color: var(--text-faint); font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+  .ledger td:last-child, .ledger th:last-child { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .ledger tr:last-child td { border-bottom: none; font-weight: 600; color: var(--text); }
+  .table-scroll { overflow-x: auto; }
+
+  /* Скриншот шире текстовой колонки: в 74 символа интерфейс нечитаем.
+     Ширина ограничена окном минус поля, поэтому вбок ничего не выезжает. */
+  .shot {
+    width: min(1040px, calc(100vw - 48px));
+    margin: 34px 0 34px 50%;
+    transform: translateX(-50%);
+  }
+  .shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-soft);
+  }
+  .shot figcaption { color: var(--text-faint); font-size: 14px; line-height: 1.55; margin-top: 10px; }
+
+  .case-cta {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px;
+    margin: 56px 0 0;
+  }
+  .case-cta h2 { margin-top: 0; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 15px;
+    margin-bottom: 26px;
+    transition: color var(--t);
+  }
+  .back-link:hover { color: var(--accent); }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 640px) {
+    .case-hero { padding: 108px 0 40px; }
+    .case-cta { padding: 22px; }
+  }
+</style>
+<!-- Класса js здесь намеренно нет: он включает скрытие блоков до появления,
+     а script.js на этой странице не подключён — контент остался бы невидимым. -->
+</head>
+<body>
+
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html" aria-label="На главную">
+      <span class="nav-logo-mark" aria-hidden="true">&lt;/&gt;</span>
+      <span class="nav-logo-text">yasin<span class="accent">274</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Основная навигация">
+      <a href="index.html#services">Услуги</a>
+      <a href="index.html#cases">Кейсы</a>
+      <a href="index.html#about">Обо мне</a>
+    </nav>
+    <a class="btn btn-primary btn-sm nav-cta" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section case-hero">
+    <div class="wrap">
+      <a class="back-link" href="index.html#cases">← Все кейсы</a>
+      <p class="eyebrow">Кейс · многостраничный сайт</p>
+      <h1>ARMORA — сайт студии оклейки авто</h1>
+      <p class="lead">
+        Защитная плёнка стоит от двадцати тысяч до четверти миллиона, и первый
+        вопрос у каждого один: сколько это будет стоить мне. Сайт отвечает на
+        него за три клика, до звонка и до осмотра.
+      </p>
+
+      <ul class="num-grid">
+        <li><b>6</b><span>страниц: услуги, работы, о студии, контакты, политика</span></li>
+        <li><b>3</b><span>шага калькулятора до цены</span></li>
+        <li><b>427</b><span>текстовых элементов проверено на контраст</span></li>
+        <li><b>0</b><span>зависимостей: ни фреймворка, ни сборки</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap case-body">
+
+      <h2>Задача</h2>
+      <p>
+        Заказчик прислал концепт с Behance и попросил такой же сайт. Концепт
+        сильный: тёмная основа, машина в зареве, крупная типографика. Но это
+        был макет одной страницы — картинка, а не работающий сайт.
+      </p>
+      <p>
+        Из макета надо было сделать то, что умеет принимать заявки: собрать
+        вёрстку, оживить калькулятор, развести содержимое по страницам и
+        проверить, что всё это читается и работает.
+      </p>
+
+      <figure class="shot">
+        <img src="images/armora-hero.png" width="1432" height="942"
+             loading="lazy" decoding="async"
+             alt="Первый экран сайта ARMORA: тёмный фон с золотым заревом, заголовок «Защитим кузов от сколов и царапин премиальной плёнкой», кнопки «Рассчитать стоимость» и «Смотреть работы», справа тёмный спортивный автомобиль. Ниже четыре плашки: гарантия 7 лет, толщина 200 микрон, срок 4 дня, 340 автомобилей.">
+        <figcaption>
+          Первый экран. Зарево под машиной — радиальный градиент, а не картинка:
+          масштабируется без веса и меняет цвет вместе с акцентом.
+        </figcaption>
+      </figure>
+
+      <h2>Калькулятор</h2>
+      <p>
+        Главный механизм сайта. Три вопроса: класс автомобиля, что оклеиваем,
+        какая плёнка. После третьего — цена.
+      </p>
+      <p>
+        Клик по варианту его <em>выбирает</em>, а шаг переключает кнопка
+        «Далее». Два действия вместо одного намеренно: человек видит, что
+        именно он выбрал, и может передумать до перехода. Кнопка заблокирована,
+        пока выбора нет, — так нельзя проскочить вопрос и получить цену из
+        воздуха.
+      </p>
+
+      <figure class="shot">
+        <img src="images/armora-result.png" width="1260" height="672"
+             loading="lazy" decoding="async"
+             alt="Третий шаг калькулятора: вопрос «Какую плёнку ставим?», три варианта, выбранный «Матовый полиуретан» подсвечен золотом. Ниже результат: ориентировочная стоимость 98 325 ₽ — 115 920 ₽ и пояснение «кроссовер, стандарт, матовый полиуретан. Точную сумму назовём после осмотра».">
+        <figcaption>
+          Результат — вилка, а не одно число. Кроссовер, стандарт, матовый
+          полиуретан: база 90 000, матовая плёнка дороже на 15%, отсюда 103 500
+          и разброс вокруг.
+        </figcaption>
+      </figure>
+
+      <div class="pull">
+        <p>
+          Показывать одну цифру до осмотра кузова было бы враньём: реальная
+          сумма зависит от состояния краски и от того, сколько придётся
+          готовить. <b>Вилка честнее — и она же не отпугивает точностью,
+          которой не существует.</b>
+        </p>
+      </div>
+
+      <h2>Смена акцента починила контраст</h2>
+      <p>
+        В концепте акцент малиновый. Собрал в нём — и упёрся: <b>малиновый
+        как текст даёт 4.14 при норме 4.5</b>. Пришлось раздваивать акцент:
+        один оттенок для заливки кнопок, второй, осветлённый, для мелкого
+        текста. Работает, но система усложняется на ровном месте.
+      </p>
+      <p>
+        Потом заказчик попросил заменить малиновый на золотой. Замерил заново:
+      </p>
+
+      <div class="table-scroll">
+        <table class="ledger">
+          <caption class="visually-hidden">Контраст акцента до и после замены</caption>
+          <thead>
+            <tr><th>Акцент как текст</th><th>Контраст</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Малиновый на карточке</td><td>4.14</td></tr>
+            <tr><td>Малиновый осветлённый</td><td>5.85</td></tr>
+            <tr><td>Золотой на карточке</td><td>9.21</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Золото проходит норму вдвое, и раздвоение стало не нужно — оба токена
+        указывают на один цвет. Разделение я оставил в коде: смена акцента
+        снова возможна одной строкой, если он опять окажется тёмным.
+      </p>
+      <p>
+        Заодно пришлось ослабить зарево под машиной с 0.30 до 0.22 — золото
+        светлее малинового, и на прежней плотности фон уходил в грязно-жёлтый.
+      </p>
+
+      <h2>Из одной страницы в шесть</h2>
+      <p>
+        Лендинг отвечает на вопрос «что вы делаете». Сайт студии, куда
+        пригоняют машину за двести тысяч, должен отвечать ещё на несколько:
+        кто работает, где бокс, что будет, если плёнку порвать.
+      </p>
+      <ul>
+        <li><b>Услуги</b> — комплексы, таблица классов автомобилей, материалы и шесть частых вопросов;</li>
+        <li><b>Работы</b> — восемь машин, по каждой комплекс, плёнка и срок;</li>
+        <li><b>О студии</b> — как устроена работа, команда и отдельный блок «чего мы не делаем»;</li>
+        <li><b>Контакты</b> — адрес, часы, форма заявки, как доехать.</li>
+      </ul>
+      <p>
+        Главную связал с ними не только меню, но и переходами из разделов.
+        Без этого внутренние страницы становятся сиротами: в меню есть, а из
+        содержимого не найти.
+      </p>
+
+      <h3>Карту не встроил</h3>
+      <p>
+        Чужой картографический скрипт тянет мегабайты и ставит куки без
+        согласия посетителя. На его месте — адрес, описание проезда и кнопка
+        открыть в любимом сервисе. Страница от этого только быстрее.
+      </p>
+
+      <h2>Как проверялось</h2>
+      <p>
+        Написал обход всех шести страниц: он считает контраст каждого
+        текстового элемента с учётом реального фона, ищет горизонтальный
+        скролл, картинки без подписи и ошибки консоли.
+      </p>
+      <ul>
+        <li><b>427 текстовых элементов</b> — ниже нормы контраста ни одного;</li>
+        <li><b>91 внутренняя ссылка и якорь</b> — все ведут в существующие места;</li>
+        <li>горизонтального скролла нет, у всех картинок есть подписи, на каждой странице ровно один заголовок первого уровня.</li>
+      </ul>
+
+      <h3>Инструмент проверки тоже пришлось проверить</h3>
+      <p>
+        Первый прогон показал десяток нарушений контраста. Все — на золотых
+        карточках, где на деле 9.33. Оказалось, мой же скрипт считал
+        прозрачный фон чёрным, а полупрозрачную плашку — сплошным золотом.
+      </p>
+
+      <div class="pull">
+        <p>
+          Переписал его так, чтобы он смешивал полупрозрачные слои, как это
+          делает браузер. <b>Если бы я поверил первому прогону, то полез бы
+          чинить работающую вёрстку</b> — и сломал бы её.
+        </p>
+      </div>
+
+      <h2>Стек</h2>
+      <ul class="case-tags">
+        <li>HTML5</li><li>CSS3</li><li>Vanilla JS</li>
+        <li>Адаптив</li><li>Доступность</li><li>SVG</li>
+      </ul>
+      <p style="margin-top:16px">
+        Ни фреймворка, ни сборщика: шесть страниц, один файл стилей, один файл
+        скриптов. Единственный внешний домен — шрифты.
+      </p>
+      <p style="color:var(--text-faint);font-size:14px">
+        Работа учебная, не по заказу клиента: студия вымышленная, фотографии
+        со стока. Интерфейс — реализация чужого дизайн-концепта:
+        <a href="https://www.behance.net/gallery/246422753/Landing-Page-auto-Cajt-oklejka-avto-Car-wrapping" target="_blank" rel="noopener">Landing Page auto | Сайт оклейка авто</a>,
+        автор макета Татьяна Кирхеснер. Вёрстка, калькулятор, внутренние
+        страницы и золотая палитра — мои.
+      </p>
+
+      <div class="case-cta">
+        <h2>Нужен сайт, который считает и принимает заявки?</h2>
+        <p>
+          Калькулятор снимает половину звонков «а сколько стоит» и приводит
+          человека уже с цифрой в голове. Расскажите, из чего складывается ваша
+          цена, — соберу такой же расчёт под вашу услугу. Разбор бесплатный.
+        </p>
+        <div class="hero-actions" style="margin-top:20px">
+          <a class="btn btn-primary" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать в Telegram</a>
+          <a class="btn btn-ghost" href="https://armora-eight.vercel.app" target="_blank" rel="noopener">Открыть сайт ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© <span id="year">2026</span> Ясин · Веб-разработка на заказ</span>
+    <span class="footer-tech">Сверстано вручную · без фреймворков и зависимостей</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
