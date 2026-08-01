@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кейс: AUTOCLEAN — лендинг автодетейлинга — Ясин</title>
+  <meta name="description" content="Лендинг студии детейлинга без единой зависимости: шторка «до и после» с поддержкой клавиатуры, форма заявки с согласием на обработку данных, тринадцать иконок нарисованы вектором вместо эмодзи.">
+
+  <meta name="theme-color" content="#0b0f1a">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Кейс: AUTOCLEAN — лендинг автодетейлинга">
+  <meta property="og:description" content="Главный аргумент детейлинга — «до и после». Как сделать его так, чтобы он работал мышью, пальцем и клавиатурой.">
+  <meta property="og:url" content="https://yasin274.github.io/case-autoclean.html">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f1a'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5M18.5 8l-5 16' fill='none' stroke='%2338bdf8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Та же типографика, что в остальных кейсах — серия должна читаться
+       как одна работа, а не как четыре разные страницы. */
+    .case-hero { padding: 132px 0 56px; }
+    .case-hero .eyebrow { margin-bottom: 14px; }
+    .case-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.12;
+      margin: 0 0 18px;
+      letter-spacing: -0.02em;
+    }
+    .case-hero .lead {
+      font-size: clamp(16px, 2.2vw, 19px);
+      color: var(--text-muted);
+      max-width: 62ch;
+      margin: 0 0 30px;
+    }
+
+    .num-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+      margin: 34px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .num-grid li {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .num-grid b {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 27px;
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .num-grid span { color: var(--text-muted); font-size: 14px; line-height: 1.45; }
+
+    .case-body { max-width: 74ch; }
+    .case-body h2 {
+      font-family: var(--font-display);
+      font-size: clamp(21px, 3vw, 27px);
+      margin: 52px 0 16px;
+      letter-spacing: -0.01em;
+    }
+    .case-body h3 { font-size: 17px; margin: 30px 0 8px; color: var(--text); }
+    .case-body p { color: var(--text-muted); margin: 0 0 15px; line-height: 1.68; }
+    .case-body strong, .case-body b { color: var(--text); font-weight: 600; }
+    .case-body ul { color: var(--text-muted); line-height: 1.68; padding-left: 20px; }
+    .case-body li { margin-bottom: 9px; }
+    .case-body kbd {
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      padding: 1px 6px;
+      color: var(--text);
+    }
+    .case-body code {
+      font-family: var(--font-mono);
+      font-size: 0.92em;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1px 5px;
+      color: var(--text);
+    }
+
+    .pull {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-soft);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 18px 22px;
+      margin: 26px 0;
+    }
+    .pull p { color: var(--text); margin: 0; font-size: 17px; line-height: 1.6; }
+
+    /* Скриншот шире текстовой колонки: в 74 символа интерфейс нечитаем.
+       Ширина ограничена окном минус поля, поэтому вбок ничего не выезжает. */
+    .shot {
+      width: min(1040px, calc(100vw - 48px));
+      margin: 34px 0 34px 50%;
+      transform: translateX(-50%);
+    }
+    .shot img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-soft);
+    }
+    .shot figcaption {
+      color: var(--text-faint);
+      font-size: 14px;
+      line-height: 1.55;
+      margin-top: 10px;
+    }
+    /* Галерея вертикальная и узкая — во всю ширину она выглядела бы башней. */
+    .shot--narrow { width: min(640px, calc(100vw - 48px)); }
+
+    .case-cta {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px;
+      margin: 56px 0 0;
+    }
+    .case-cta h2 { margin-top: 0; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      margin-bottom: 26px;
+      transition: color var(--t);
+    }
+    .back-link:hover { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      .case-hero { padding: 108px 0 40px; }
+      .case-cta { padding: 22px; }
+    }
+  </style>
+  <!-- Класса js здесь намеренно нет: он включает скрытие блоков до появления,
+       а script.js на этой странице не подключён — контент остался бы невидимым. -->
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Перейти к содержанию</a>
+
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html" aria-label="На главную">
+        <span class="nav-logo-mark" aria-hidden="true">&lt;/&gt;</span>
+        <span class="nav-logo-text">yasin<span class="accent">274</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Основная навигация">
+        <a href="index.html#services">Услуги</a>
+        <a href="index.html#cases">Кейсы</a>
+        <a href="index.html#about">Обо мне</a>
+      </nav>
+      <a class="btn btn-primary btn-sm nav-cta" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="section case-hero">
+      <div class="wrap">
+        <a class="back-link" href="index.html#cases">← Все кейсы</a>
+        <p class="eyebrow">Кейс · лендинг под заявки</p>
+        <h1>AUTOCLEAN — лендинг студии детейлинга</h1>
+        <p class="lead">
+          У детейлинга ровно один убедительный аргумент — «до и после».
+          Всё остальное на странице обслуживает его: сравнение работает мышью,
+          пальцем и клавиатурой, а заявка отправляется в два поля.
+        </p>
+
+        <ul class="num-grid">
+          <li><b>0</b><span>зависимостей: ни фреймворка, ни сборки, ни библиотек</span></li>
+          <li><b>4</b><span>работы «до и после» с перетаскиваемой шторкой</span></li>
+          <li><b>13</b><span>иконок нарисованы вектором вместо эмодзи</span></li>
+          <li><b>1</b><span>внешний домен — только шрифты</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="wrap case-body">
+
+        <h2>Задача</h2>
+        <p>
+          Студия премиального детейлинга: полировка, керамика, защитная плёнка,
+          химчистка салона. Клиент такой студии выбирает глазами и платит за
+          результат, который трудно описать словами — «глубина цвета», «блеск
+          как из салона». Значит страница должна не рассказывать, а показывать.
+        </p>
+        <p>
+          Отсюда два требования: сравнение до и после в центре страницы, и
+          скорость. Человек, который смотрит машины с телефона в дороге, не
+          станет ждать загрузки трёх мегабайт скриптов.
+        </p>
+
+        <h2>Шторка «до и после»</h2>
+        <p>
+          Две фотографии наложены друг на друга, верхняя обрезается по вертикали
+          и следует за ручкой. Реализовано на <code>clip-path</code>, без
+          библиотек — весь механизм умещается в несколько десятков строк.
+        </p>
+
+        <figure class="shot shot--narrow">
+          <img src="images/autoclean-gallery.png" width="730" height="936"
+               loading="lazy" decoding="async"
+               alt="Четыре карточки работ со шторкой сравнения: BMW X5 — полировка кузова, Mercedes C-Class — керамика, Audi A6 — чистка салона, Range Rover — защита плёнкой. На каждой слева грязный автомобиль с меткой «до», справа отполированный с меткой «после», между ними золотая вертикальная ручка.">
+          <figcaption>
+            Слева от ручки — как приехало, справа — как уехало. Ручку можно
+            тянуть, а можно просто ткнуть в любое место карточки.
+          </figcaption>
+        </figure>
+
+        <h3>Почему указатель, а не мышь</h3>
+        <p>
+          Обработчики повешены на события указателя, а не отдельно на мышь и
+          касания. Одна ветка кода вместо двух, и палец на телефоне работает
+          так же, как курсор. <code>setPointerCapture</code> удерживает
+          перетаскивание, даже если палец ушёл за пределы карточки — иначе
+          шторка застревала бы на полпути при резком движении.
+        </p>
+
+        <h3>И клавиатурой тоже</h3>
+        <p>
+          Ручка получает фокус, объявлена как ползунок и слушает клавиши:
+          <kbd>←</kbd> и <kbd>→</kbd> шагают по 5%, <kbd>Home</kbd> и
+          <kbd>End</kbd> бросают шторку к краям. Текущее положение отдаётся в
+          <code>aria-valuenow</code>, поэтому экранный диктор проговаривает
+          процент, а не молчит.
+        </p>
+
+        <div class="pull">
+          <p>
+            Клавиши <kbd>Home</kbd> и <kbd>End</kbd> добавлены после проверки:
+            роль ползунка уже была объявлена, а обрабатывались только стрелки.
+            <b>Роль, которая обещает больше, чем умеет, хуже её отсутствия</b> —
+            диктор объявляет ползунок, человек жмёт End и не получает ничего.
+          </p>
+        </div>
+
+        <h2>Иконки: вектор вместо эмодзи</h2>
+        <p>
+          В карточках стояли эмодзи. Выглядит быстро и бесплатно, но рисует их
+          шрифт операционной системы: на Windows они плоские и разноцветные,
+          на macOS объёмные, на части Android подменяются пустым квадратом.
+          Одна и та же страница выглядела по-разному у разных людей, а пёстрые
+          цвета спорили с золотым акцентом макета.
+        </p>
+
+        <figure class="shot">
+          <img src="images/autoclean-icons.png" width="1248" height="322"
+               loading="lazy" decoding="async"
+               alt="Четыре карточки услуг на тёмном фоне: Paint Correction с меткой «популярный», Ceramic Coating, Interior Detailing, PPF Installation. У каждой сверху золотой контурный значок в квадратной плашке: блик полировки, щит, щётка и укрывающий лист.">
+          <figcaption>
+            Тринадцать значков переведены на контурный SVG. Цвет наследуется
+            от текста, поэтому иконки автоматически совпадают с акцентом.
+          </figcaption>
+        </figure>
+
+        <p>
+          Три значка пришлось переработать уже после того, как я посмотрел их
+          в готовом виде: в мелком размере значок запаха сливался с соседним
+          солнцем, кресло читалось как принтер, а плёнка — как коробка. Стали
+          волны, щётка и укрывающий лист.
+        </p>
+        <p>
+          Заодно это починило озвучку: раньше диктор зачитывал название эмодзи
+          («знак запрета», «денежные купюры с крыльями»), теперь — то, что
+          значок обозначает.
+        </p>
+
+        <h2>Форма заявки</h2>
+        <p>
+          Пять полей и отметка согласия на обработку данных. Согласие —
+          не украшение: форма собирает имя и телефон, то есть персональные
+          данные, и без отметки заявка не отправляется. Телефон вводится
+          через маску, ошибки показываются под конкретным полем, а не одной
+          строкой сверху.
+        </p>
+
+        <h2>Скорость</h2>
+        <p>
+          Ни фреймворка, ни сборщика, ни библиотек — только разметка, стили и
+          один файл скриптов. Единственный внешний домен на всей странице —
+          шрифты. Фотографии работ грузятся лениво: пока посетитель читает
+          первый экран, галерея ещё не тратит его трафик.
+        </p>
+        <p>
+          Побочный плюс такого подхода — долговечность. Через год здесь нечему
+          сломаться от обновления зависимостей, потому что зависимостей нет.
+        </p>
+
+        <h2>Стек</h2>
+        <ul class="case-tags">
+          <li>HTML5</li><li>CSS3</li><li>Vanilla JS</li>
+          <li>Pointer Events</li><li>SVG</li><li>Адаптив</li>
+        </ul>
+        <p style="margin-top:16px;color:var(--text-faint);font-size:14px">
+          Работа учебная, не по заказу клиента: студия вымышленная, фотографии
+          работ взяты для примера. Вёрстка, шторка сравнения, иконки и форма —
+          мои.
+        </p>
+
+        <div class="case-cta">
+          <h2>Нужен лендинг, который приносит заявки?</h2>
+          <p>
+            Если результат вашей работы видно глазами — его надо показывать, а
+            не описывать. Расскажите, что вы делаете и кому продаёте, — предложу,
+            как это подать, и назову срок и цену. Разбор задачи бесплатный.
+          </p>
+          <div class="hero-actions" style="margin-top:20px">
+            <a class="btn btn-primary" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать в Telegram</a>
+            <a class="btn btn-ghost" href="https://yasin274.github.io/auto-detailing-landing/" target="_blank" rel="noopener">Открыть сайт ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>© <span id="year">2026</span> Ясин · Веб-разработка на заказ</span>
+      <span class="footer-tech">Сверстано вручную · без фреймворков и зависимостей</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
