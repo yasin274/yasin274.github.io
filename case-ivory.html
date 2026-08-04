@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кейс: ИВОРИ — лендинг стоматологии — Ясин</title>
+<meta name="description" content="Лендинг стоматологической клиники без единой библиотеки: разлёт импланта на одном CSS-числе, один rAF-тикер на всю страницу и форма, которая перестала утекать данными в адресную строку.">
+
+<meta name="theme-color" content="#0b0f1a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Кейс: ИВОРИ — лендинг стоматологии">
+<meta property="og:description" content="Ноль библиотек, ноль внешних доменов. И форма, которая без JavaScript уносила телефон пациента в адресную строку.">
+<meta property="og:url" content="https://yasin274.github.io/case-ivory.html">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0f1a'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5M18.5 8l-5 16' fill='none' stroke='%2338bdf8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="style.css">
+
+<style>
+  /* Та же типографика, что в остальных кейсах — серия должна читаться
+     как одна работа, а не как шесть разных страниц. */
+  .case-hero { padding: 132px 0 56px; }
+  .case-hero .eyebrow { margin-bottom: 14px; }
+  .case-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 5vw, 48px);
+    line-height: 1.12;
+    margin: 0 0 18px;
+    letter-spacing: -0.02em;
+  }
+  .case-hero .lead {
+    font-size: clamp(16px, 2.2vw, 19px);
+    color: var(--text-muted);
+    max-width: 62ch;
+    margin: 0 0 30px;
+  }
+
+  .num-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin: 34px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .num-grid li {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .num-grid b {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 27px;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .num-grid span { color: var(--text-muted); font-size: 14px; line-height: 1.45; }
+
+  .case-body { max-width: 74ch; }
+  .case-body h2 {
+    font-family: var(--font-display);
+    font-size: clamp(21px, 3vw, 27px);
+    margin: 52px 0 16px;
+    letter-spacing: -0.01em;
+  }
+  .case-body h3 { font-size: 17px; margin: 30px 0 8px; color: var(--text); }
+  .case-body p { color: var(--text-muted); margin: 0 0 15px; line-height: 1.68; }
+  .case-body strong, .case-body b { color: var(--text); font-weight: 600; }
+  .case-body ul { color: var(--text-muted); line-height: 1.68; padding-left: 20px; }
+  .case-body li { margin-bottom: 9px; }
+  .case-body code {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1px 5px;
+    color: var(--text);
+  }
+
+  .pull {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 18px 22px;
+    margin: 26px 0;
+  }
+  .pull p { color: var(--text); margin: 0; font-size: 17px; line-height: 1.6; }
+
+  .ledger { width: 100%; border-collapse: collapse; margin: 20px 0 8px; font-size: 15px; }
+  .ledger th, .ledger td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+  .ledger th { color: var(--text-faint); font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+  .ledger td:last-child, .ledger th:last-child { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .ledger tr:last-child td { border-bottom: none; font-weight: 600; color: var(--text); }
+  .table-scroll { overflow-x: auto; }
+
+  /* Скриншот шире текстовой колонки: в 74 символа интерфейс нечитаем.
+     Ширина ограничена окном минус поля, поэтому вбок ничего не выезжает. */
+  .shot {
+    width: min(1040px, calc(100vw - 48px));
+    margin: 34px 0 34px 50%;
+    transform: translateX(-50%);
+  }
+  .shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-soft);
+  }
+  .shot figcaption { color: var(--text-faint); font-size: 14px; line-height: 1.55; margin-top: 10px; }
+
+  .case-cta {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px;
+    margin: 56px 0 0;
+  }
+  .case-cta h2 { margin-top: 0; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 15px;
+    margin-bottom: 26px;
+    transition: color var(--t);
+  }
+  .back-link:hover { color: var(--accent); }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 640px) {
+    .case-hero { padding: 108px 0 40px; }
+    .case-cta { padding: 22px; }
+  }
+</style>
+<!-- Класса js здесь намеренно нет: он включает скрытие блоков до появления,
+     а script.js на этой странице не подключён — контент остался бы невидимым. -->
+</head>
+<body>
+
+<a class="skip-link" href="#main">Перейти к содержанию</a>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html" aria-label="На главную">
+      <span class="nav-logo-mark" aria-hidden="true">&lt;/&gt;</span>
+      <span class="nav-logo-text">yasin<span class="accent">274</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Основная навигация">
+      <a href="index.html#services">Услуги</a>
+      <a href="index.html#cases">Кейсы</a>
+      <a href="index.html#about">Обо мне</a>
+    </nav>
+    <a class="btn btn-primary btn-sm nav-cta" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section case-hero">
+    <div class="wrap">
+      <a class="back-link" href="index.html#cases">← Все кейсы</a>
+      <p class="eyebrow">Кейс · лендинг медицинской клиники</p>
+      <h1>ИВОРИ — лендинг стоматологии</h1>
+      <p class="lead">
+        Страница, где имплант разбирается на части по мере прокрутки. Без
+        three.js, без GSAP, без единой библиотеки — вся анимация сведена
+        к одному числу в CSS.
+      </p>
+
+      <ul class="num-grid">
+        <li><b>0</b><span>библиотек в рантайме и ноль обращений к чужим доменам</span></li>
+        <li><b>10</b><span>нативных ES-модулей вместо сборщика</span></li>
+        <li><b>1</b><span>тикер анимации на всю страницу</span></li>
+        <li><b>6</b><span>дефектов найдено ревью и закрыто до публикации</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap case-body">
+
+      <h2>Задача</h2>
+      <p>
+        Взять сильный дизайн-концепт с Behance и сделать из него работающую
+        страницу. Концепт — презентация: семь статичных слайдов, 3D-рендеры
+        импланта из Cinema 4D, авторская сетка и палитра. Красиво, но кликнуть
+        не по чему.
+      </p>
+      <p>
+        Отдельная сложность: в оригинале имплант — трёхмерная модель, которая
+        разлетается на части. Тянуть ради этого three.js значило бы добавить к
+        странице <b>170 КБ в сжатом виде</b> — больше, чем весит всё остальное
+        вместе взятое.
+      </p>
+
+      <figure class="shot">
+        <img src="images/ivory-hero.png" width="1920" height="1080"
+             loading="lazy" decoding="async"
+             alt="Первый экран лендинга ИВОРИ: светло-голубой фон, крупный заголовок «Инновационная имплантация зубов для здоровой и уверенной улыбки», в центре реалистичный зубной имплант с коронкой, к нему ведут тонкие линии-выноски «Пожизненная гарантия на конструкцию» и «Официальный статус поставщика имплантов», слева нумерованная дорожка секций, внизу тёмная кнопка «Записаться на консультацию».">
+        <figcaption>
+          Первый экран. Имплант — плоский SVG, а не 3D-модель: тот же силуэт
+          и те же блики, но ноль килобайт сверх страницы.
+        </figcaption>
+      </figure>
+
+      <h2>Разлёт на одном числе</h2>
+      <p>
+        Вместо 3D-сцены — SVG, у которого вся анимация управляется единственной
+        CSS-переменной <code>--p</code> на контейнере: от 0 (собран) до 1
+        (разобран). JavaScript считает прогресс прокрутки и пишет туда одно
+        число. Больше он не делает ничего.
+      </p>
+      <p>
+        Вся геометрия — коронка уходит вверх-вправо, винт вниз-влево, выноски
+        включаются на порогах 0.30 / 0.45 / 0.60 / 0.75 — живёт в CSS и читается
+        по наследованию. <b>Заменить SVG на настоящий three.js можно, не трогая
+        ни раскладку, ни движок анимации:</b> точки подключения те же, меняется
+        только то, что рисует картинку.
+      </p>
+
+      <figure class="shot">
+        <img src="images/ivory-quality.png" width="1920" height="1080"
+             loading="lazy" decoding="async"
+             alt="Секция «Сертифицированное качество»: имплант в середине разлёта — коронка отделилась и ушла вверх вправо, титановый винт с резьбой опустился влево вниз, справа приглушённым шрифтом «Официальная гарантия», внизу ссылка «Смотреть сертификат».">
+        <figcaption>
+          Середина разлёта. Секция «прибита» к экрану на полтора экрана
+          прокрутки, и всё это время меняется одно число.
+        </figcaption>
+      </figure>
+
+      <h2>Один тикер вместо десяти слушателей</h2>
+      <p>
+        На странице шесть механизмов, зависящих от прокрутки: разлёт, параллакс,
+        появление блоков, состояние шапки, подсветка активного пункта меню,
+        счётчики. Обычно каждый вешает свой <code>scroll</code>-слушатель, и
+        браузер на каждый пиксель прокрутки дёргает их все.
+      </p>
+      <p>
+        Здесь <b>во всём проекте ноль обработчиков <code>scroll</code></b>.
+        Есть один цикл на <code>requestAnimationFrame</code>, к которому
+        механизмы подписываются. Браузер получает одну точку входа вместо шести.
+      </p>
+
+      <div class="pull">
+        <p>
+          Ревью поймало на этом же месте дефект: в корень документа каждый кадр
+          писалась переменная, которую <b>не читал ни один файл проекта</b>.
+          Незарегистрированное свойство на корне заставляет браузер пересчитывать
+          стиль всего дерева — <b>18.6 мс на кадр вместо 1.3</b>. Удаление одной
+          строки убрало разницу в четырнадцать раз.
+        </p>
+      </div>
+
+      <h2>Форма, которая утекала</h2>
+      <p>
+        Самая неприятная находка. У формы заявки не было ни <code>action</code>,
+        ни <code>method</code> — вся отправка висела на JavaScript. Пока скрипт
+        работает, всё честно: ни одного сетевого запроса, данные никуда не идут.
+      </p>
+      <p>
+        Но если скрипт не загрузился, браузер делает то, что положено по
+        умолчанию: отправляет форму <b>методом GET на текущий адрес</b>. Имя и
+        телефон человека уезжают в адресную строку — и оттуда в логи сервера,
+        в историю браузера, в реферер. При этом страница в тот же момент
+        уверяла посетителя, что никаких запросов не происходит.
+      </p>
+      <p>
+        Лечится одним атрибутом: <code>method="dialog"</code>. Форма вне тега
+        <code>&lt;dialog&gt;</code> с таким методом при отправке не делает
+        ничего — ни запроса, ни перехода.
+      </p>
+
+      <div class="pull">
+        <p>
+          Сценарий редкий: у большинства посетителей JavaScript отработает.
+          Но <b>«редко» и «никогда» — разные вещи</b>, а цена ошибки здесь —
+          чужой номер телефона в чужих логах.
+        </p>
+      </div>
+
+      <h2>Где «крупный текст» не спасает</h2>
+      <p>
+        В палитре три ступени приглушённого серо-голубого. Самая светлая
+        применялась только к словам в огромных заголовках — с логикой «чем
+        крупнее буквы, тем светлее можно».
+      </p>
+      <p>
+        Логика неверная. Послабление для крупного текста <b>опускает порог
+        с 4.5 до 3:1, но не отменяет его</b>. Замер: 2.21 — мимо даже
+        стапятидесятипиксельного заголовка.
+      </p>
+
+      <div class="table-scroll">
+        <table class="ledger">
+          <caption class="visually-hidden">Контраст приглушённых цветов к фону страницы</caption>
+          <thead>
+            <tr><th>Ступень</th><th>Где применяется</th><th>Было → стало</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Светлая</td><td>слова в заголовках от 56 px</td><td>2.21 → 3.10</td></tr>
+            <tr><td>Средняя</td><td>подзаголовки 21–55 px</td><td>3.15</td></tr>
+            <tr><td>Тёмная</td><td>мелкий текст 13–20 px</td><td>4.98</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Светлее сделать нельзя: на этом фоне порог 3:1 упирается примерно
+        в <code>#76899F</code>. Это предел палитры, а не выбор вкуса — так и
+        записано в файле токенов, чтобы цвет не «вернули как было красивее».
+      </p>
+
+      <h2>Подпись поверх фотографии</h2>
+      <p>
+        Белая подпись лежала прямо на снимке. Низ кадра местами почти белый —
+        в худшей точке контраст <b>1.3 при норме 4.5</b>. Мягкая тень под
+        текстом эту роль не выполняет: она размывается и в зачёт по нормам
+        не идёт.
+      </p>
+      <p>
+        Добавил градиентное затемнение под подписью. Высоту задал в пикселях,
+        а не в процентах: подпись прижата к низу на фиксированные 20 px, а сам
+        кадр по брейкпоинтам меняет высоту с 190 до 490 px — от процента доля
+        тёмного гуляла бы от 0.60 до 0.85. Проверял не на глаз, а <b>по
+        пикселям самого снимка</b>: даже если однажды в этот слот положат
+        абсолютно белую фотографию, под подписью останется 5.3:1.
+      </p>
+
+      <figure class="shot">
+        <img src="images/ivory-services.png" width="1920" height="1080"
+             loading="lazy" decoding="async"
+             alt="Секция «Услуги»: слева заголовок «Экспертная помощь каждой улыбке» и чёрно-белое фото интерьера клиники с читаемой белой подписью на затемнении, справа список из четырёх услуг, третий пункт «Протезирование и реставрация» раскрыт — описание, цена от 45 000 ₽, пометка «Стоимость указана для примера и не является офертой» и кнопка записи.">
+        <figcaption>
+          Раскрытый пункт услуг. Цена подписана как пример, а не как оферта —
+          клиника вымышленная, и обещать от её имени нечего.
+        </figcaption>
+      </figure>
+
+      <h2>Стек</h2>
+      <ul class="case-tags">
+        <li>HTML5</li><li>CSS3</li><li>ES-модули</li>
+        <li>SVG</li><li>Адаптив</li><li>Доступность</li>
+      </ul>
+      <p style="margin-top:16px">
+        Ни фреймворка, ни сборщика: семь файлов стилей, десять модулей,
+        подключённых нативно. Шрифт лежит рядом со страницей, а не тянется
+        с чужого CDN, — <b>в рантайме страница не ходит ни на один сторонний
+        домен</b>. Открывается двойным кликом по локальному серверу и живёт
+        на любом хостинге.
+      </p>
+      <p style="color:var(--text-faint);font-size:14px">
+        Работа учебная, не по заказу клиента. Клиника «ИВОРИ» вымышлена:
+        телефон, адреса, цены, имена пациентов и лицензии — заведомо
+        фиктивные, фотографии обезличенные, форма заявки никуда не отправляет
+        данные. Интерфейс — реализация чужого дизайн-концепта:
+        <a href="https://www.behance.net/gallery/237704709/Dental-Landing-Page-Web-Site-Design-Ivory-Clinic" target="_blank" rel="noopener">Dental Landing Page — Ivory Clinic</a>,
+        авторы макета Humeniakk Design и Kostya Kharytoniuk. Вёрстка,
+        анимация разлёта, скриптовая часть и вся инженерия — мои.
+      </p>
+
+      <div class="case-cta">
+        <h2>Нужен сайт, который открывается мгновенно?</h2>
+        <p>
+          Страница без библиотек грузится быстрее, не ломается от обновления
+          чужого пакета и не требует пересборки, чтобы поправить запятую.
+          Расскажите, что нужно вашему делу, — соберу так же. Разбор бесплатный.
+        </p>
+        <div class="hero-actions" style="margin-top:20px">
+          <a class="btn btn-primary" href="https://t.me/yasin2099" target="_blank" rel="noopener">Написать в Telegram</a>
+          <a class="btn btn-ghost" href="https://ivory-dental-alpha.vercel.app" target="_blank" rel="noopener">Открыть сайт ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© <span id="year">2026</span> Ясин · Веб-разработка на заказ</span>
+    <span class="footer-tech">Сверстано вручную · без фреймворков и зависимостей</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
